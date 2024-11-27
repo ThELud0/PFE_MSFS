@@ -210,6 +210,16 @@ function displayRound() {
   roundDisplayBox.innerHTML = `<div class="roundDisplay">Round ${currentRound}/${maxRound}</br>Total score: ${totalScore}</div>`;
 }
 
+function topPercentileCalculation(score){
+  if (score>=24999)
+    return 100;
+  else if (score <=0)
+    return 0;
+  var f2 = 1.82502 - score/2000 > 0? 1.82502 - score/2000 : 0;
+  var top = 104.3912 + (1.825022-104.3912)/(1+((score/8360.522)**2)*0.599949) - f2 + 0.000042*score;
+  return top.toFixed(2);
+}
+
 //Pop-up on confirm event when a marker has been put down
 function resultWithMarkerChoice() {
   var popupContainer = document.getElementById("popup-container");
@@ -328,7 +338,10 @@ function ShowEndResults() {
   var closeButton = document.createElement("button");
 
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">Game end !</br>Congratulations ! You scored a total of ${totalScore} points. </br>Average guess time: ${
+
+  var topBeat = topPercentileCalculation(totalScore);
+
+  popupBox.innerHTML = `<div class="popup-content">Game end !</br>Congratulations ! You scored a total of ${totalScore} points and beat ${topBeat}% of players. </br>Average guess time: ${
     totalGuessTime / maxRound
   } seconds (Total time: ${totalGuessTime} seconds)
   <br/>Average distance from marker: ${
