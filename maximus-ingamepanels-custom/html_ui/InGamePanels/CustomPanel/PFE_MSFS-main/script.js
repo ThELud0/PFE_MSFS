@@ -179,7 +179,7 @@ function generateNewTarget() {
   parent.setPlanePosition(coordinates.latitude, coordinates.longitude);
 
 
-  displayCoordinates();
+  //displayCoordinates();
 }
 /*
 
