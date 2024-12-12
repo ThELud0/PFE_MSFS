@@ -157,7 +157,7 @@ function generateRandomLandCoordinates() {
 
 function generateChosenLandCoordinates() {
   // Select a random continent from the land array
-  const chosenContinent = chosenLandmarks[currentRound];
+  const chosenContinent = chosenLandmarks[currentRound-1];
   //const chosenContinent = land[0];
 
   // Generate random latitude and longitude within the ranges
@@ -329,9 +329,10 @@ function resultWithMarkerChoice() {
   closeButton.addEventListener("click", function () {
     clearAnswer();
     if (currentRound < maxRound) {
+      currentRound++;
       generateNewTarget();
       startTimer();
-      currentRound++;
+      
 
       mapInteractable = true;
     } else ShowEndResults();
@@ -364,9 +365,10 @@ function resultWithoutMarkerChoice() {
 
   closeButton.addEventListener("click", function () {
     if (currentRound < maxRound) {
+      currentRound++;
       generateNewTarget();
       startTimer();
-      currentRound++;
+      
     } else ShowEndResults();
     displayRound();
     mapInteractable = true;
