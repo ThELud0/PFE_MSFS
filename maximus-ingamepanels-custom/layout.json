@@ -1,0 +1,44 @@
+{
+  "content": [
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/CustomPanel.html",
+      "size": 1535,
+      "date": 132440507097241168
+    },
+    {
+      "path": "html_ui/Textures/Menu/toolbar/ICON_TOOLBAR_MAXIMUS_CUSTOM_PANEL.svg",
+      "size": 2641,
+      "date": 132453435271410222
+    },
+    {
+      "path": "InGamePanels/maximus-ingamepanels-custom.spb",
+      "size": 698,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/PFE_MSFS-main/index.html",
+      "size": 1121,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/PFE_MSFS-main/script.js",
+      "size": 14199,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/PFE_MSFS-main/styles.css",
+      "size": 1208,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/PFE_MSFS-main/flag_marker.png",
+      "size": 7425,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/InGamePanels/CustomPanel/CustomPanel.css",
+      "size": 1538,
+      "date": 132453435271410222
+    }
+  ]
+}
