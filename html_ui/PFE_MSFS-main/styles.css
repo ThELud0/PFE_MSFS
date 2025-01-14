@@ -3,18 +3,23 @@
   left: 50%;
   bottom: 15%;
   z-index: 9999;
-  font-size: 1em;
+  font-size: 2vw;
   display: flex;
   flex-direction: column;
   transform: translate(-50%, 0);
 }
 
+.form #btn {
+  width: 16vw;
+  height: 5vw;
+  font-size: 2vw;
+}
+
 #safeTimerDisplay {
   position: absolute;
-  font-size:1.5em;
-  top: 50px;
-  left: 100px;
-  transform: translate(-50%, -50%);
+  font-size: 3vw;
+  top: 5%;
+  left: 12%;
   z-index: 9999;
 }
 
@@ -53,28 +58,39 @@
 }
 
 #popup-container .popup-box {
-  font-size: large;
+  font-size: 2vw;
   align-items: center;
   justify-items: center;
   background-color: rgb(255 255 255 / 0.5);
-  padding:10px;
+  padding: 10px;
 }
 
 #roundDisplayDiv {
   position: absolute;
-  font-size:1.5em;
-  top: 50px;
-  right: 30px;
-  transform: translate(-50%, -50%);
+  font-size: 2.5vw;
+  top: 5%;
+  right: 8%;
   z-index: 9999;
 }
 
 #popup-container .popup-box .close-btn {
   margin: 20px;
+  width: 16vw;
+  height: 5vw;
+  font-size: 2vw;
 }
 
 #popup-container .popup-box .popup-content {
-    margin: 20px;
-  }
+  margin: 20px;
+}
 
+.leaflet-touch .leaflet-bar a {
+  width: 5vw !important;
+  height: 5vw !important;
+  line-height: 5vw !important;
+}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out {
+  font-size: 4vw !important;
+}
 
