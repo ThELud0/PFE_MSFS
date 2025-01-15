@@ -16,7 +16,7 @@ const chosenLandmarks = [eiffelTower,libertyStatue,bigBen,pyramides,telecomSudpa
 
 const maxScore = 5000;
 const maxRound = 5;
-const timerDuration = 30;
+const timerDuration = 120; //in seconds
 
 var markerLatitude;
 var markerLongitude;
