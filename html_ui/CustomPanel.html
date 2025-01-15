@@ -54,6 +54,21 @@
                 console.error("SimVar error:", error);
             }
         }
+
+        function checkIfInVR() {
+            try {
+                // Get variable state
+                const isInVr = SimVar.GetSimVarValue("IS IN VR", "Boolean");
+                if (isInVr == 0)
+                    document.getElementById('CustomPanelIframe').contentWindow.setIsInVR(false);
+                else 
+                    document.getElementById('CustomPanelIframe').contentWindow.setIsInVR(true);
+
+            } catch (error) {
+                console.error("SimVar error:", error);
+            }
+        }
+
     </script>
 
 </body>

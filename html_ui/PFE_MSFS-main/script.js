@@ -1,3 +1,6 @@
+const browserOnly = false; //FlightSim methods will break the code when they fail; if trying out code in browser, set this to true to not break other code
+
+
 const northAmerica = { topleft: [70, -166], botright: [18, -67] };
 const southAmerica = { topleft: [8.6, -83], botright: [-55, -43] };
 const europeAndAfrica = { topleft: [68, -8.6], botright: [-35, 45] };
@@ -6,13 +9,13 @@ const oceania = { topleft: [5, 100], botright: [-44, 155] };
 
 const land = [northAmerica, southAmerica, europeAndAfrica, asia, oceania];
 
-const eiffelTower = {latitude:48.857308, longitude:2.294126};
-const libertyStatue = {latitude:40.691100, longitude:-74.047628};
-const bigBen = {latitude:51.500388, longitude:-0.124305};
-const pyramides = {latitude:29.976022, longitude:31.132387};
-const telecomSudparis = {latitude:48.623716, longitude: 2.443632};
+const eiffelTower = { latitude: 48.857308, longitude: 2.294126 };
+const libertyStatue = { latitude: 40.691100, longitude: -74.047628 };
+const bigBen = { latitude: 51.500388, longitude: -0.124305 };
+const pyramides = { latitude: 29.976022, longitude: 31.132387 };
+const telecomSudparis = { latitude: 48.623716, longitude: 2.443632 };
 
-const chosenLandmarks = [eiffelTower,libertyStatue,bigBen,pyramides,telecomSudparis];
+const chosenLandmarks = [eiffelTower, libertyStatue, bigBen, pyramides, telecomSudparis];
 
 const maxScore = 5000;
 const maxRound = 5;
@@ -20,6 +23,8 @@ const timerDuration = 120; //in seconds
 
 var markerLatitude;
 var markerLongitude;
+
+let isInVr = true;
 
 let marker = null;
 
@@ -35,6 +40,8 @@ let totalScore = 0;
 
 let currentRound = 1;
 var timer = null;
+var clickTimer = null;
+var clickCountdown = 0;
 var mapInteractable = true;
 
 var southWestBound = L.latLng(-89.98155760646617, -360),
@@ -62,6 +69,12 @@ var flagIcon = L.icon({
   iconAnchor: [1, 48],
 });
 
+
+function setIsInVR(state) {
+  isInVr = state;
+  document.getElementById("isinvr").value = isInVr;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //------------------------------ MAP CREATION ---------------------------------//
 ////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +99,7 @@ function updateDebugCoordinatesDisplay(latVal, lgnVal) {
   //document.getElementById("longitude").value =lgnVal;
 }
 
-map.on("click", (event) => {
+function putDownMarker(event) {
   if (mapInteractable) {
     if (marker !== null) {
       map.removeLayer(marker);
@@ -101,7 +114,49 @@ map.on("click", (event) => {
     console.log("clicked map");
     updateDebugCoordinatesDisplay(event.latlng.lat, event.latlng.lng);
   }
+}
+
+/*
+map.on("click", (event) => {
+  if (!isInVr)
+    putDownMarker(event);
+});*/
+
+
+map.on("mousedown", (event) => {
+  if (isInVr) {
+    clickCountdown = 0;
+
+    clickTimer = setInterval(function () {
+      clickCountdown += 0.05;
+      document.getElementById("ctd").value = 1;
+      if (clickCountdown >= 0.15)
+        clearInterval(clickTimer);
+    }, 50);
+
+  }
 });
+
+map.on("mouseup", (event) => {
+  if (isInVr) {
+
+    if (clickCountdown <= 0.1) {
+      putDownMarker(event);
+    }
+    clearInterval(clickTimer);
+    clickCountdown = 0;
+  }
+
+});
+
+map.on("mouseout", (event) => {
+  if (isInVr) {
+    clearInterval(clickTimer);
+    clickCountdown = 0;
+  }
+});
+
+
 
 // Function to display a marker at var coordinates in the div and on map
 function displayCoordinates() {
@@ -157,7 +212,7 @@ function generateRandomLandCoordinates() {
 
 function generateChosenLandCoordinates() {
   // Select a random continent from the land array
-  const chosenContinent = chosenLandmarks[currentRound-1];
+  const chosenContinent = chosenLandmarks[currentRound - 1];
   //const chosenContinent = land[0];
 
   // Generate random latitude and longitude within the ranges
@@ -176,7 +231,8 @@ function generateNewTarget() {
     return;
   } else console.log("SimVar is loaded.");
 
-  parent.setPlanePosition(coordinates.latitude, coordinates.longitude);
+  if (!browserOnly)
+    parent.setPlanePosition(coordinates.latitude, coordinates.longitude);
 
 
   //displayCoordinates();
@@ -332,9 +388,10 @@ function resultWithMarkerChoice() {
       currentRound++;
       generateNewTarget();
       startTimer();
-      
-
       mapInteractable = true;
+      /*
+      if (!browserOnly)
+        parent.checkIfInVR();*/
     } else ShowEndResults();
     displayRound();
     resetMarker();
@@ -368,7 +425,10 @@ function resultWithoutMarkerChoice() {
       currentRound++;
       generateNewTarget();
       startTimer();
-      
+      /*
+      if (!browserOnly)
+        parent.checkIfInVR();*/
+
     } else ShowEndResults();
     displayRound();
     mapInteractable = true;
@@ -387,12 +447,10 @@ function ShowEndResults() {
 
   var topBeat = topPercentileCalculation(totalScore);
 
-  popupBox.innerHTML = `<div class="popup-content">Game end !</br>Congratulations ! You scored a total of ${totalScore} points and beat ${topBeat}% of players. </br>Average guess time: ${
-    totalGuessTime / maxRound
-  } seconds (Total time: ${totalGuessTime} seconds)
-  <br/>Average distance from marker: ${
-    totalDistance / maxRound
-  }km (Total distance: ${totalDistance}km)</div>`;
+  popupBox.innerHTML = `<div class="popup-content">Game end !</br>Congratulations ! You scored a total of ${totalScore} points and beat ${topBeat}% of players. </br>Average guess time: ${totalGuessTime / maxRound
+    } seconds (Total time: ${totalGuessTime} seconds)
+  <br/>Average distance from marker: ${totalDistance / maxRound
+    }km (Total distance: ${totalDistance}km)</div>`;
   mapInteractable = false;
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -453,6 +511,8 @@ function startTimer() {
       min + ":" + zeroFiller + secDisplay;
     sec--;
     totalGuessTime++;
+    /*if ((sec % 5 == 0) && !browserOnly)
+      parent.checkIfInVR();*/
     if (sec < 0) {
       clearInterval(timer);
       if (marker != null) resultWithMarkerChoice();
@@ -473,10 +533,20 @@ function startGame() {
   generateNewTarget();
   displayRound();
   startTimer();
+  /*
+  if (!browserOnly)
+    parent.checkIfInVR();*/
+
 }
 
 window.onload = function () {
   ShowStartMenu();
+  map.zoomControl.remove();
+  L.control.zoom({
+    position: 'topleft',
+    zoomInText: '<span aria-hidden="false">+</span>',
+    zoomOutText: '<span aria-hidden="false">-</span>'
+}).addTo(map);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,9 +560,9 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c; // Distance in km
   return d;

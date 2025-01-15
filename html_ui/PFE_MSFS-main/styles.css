@@ -92,5 +92,9 @@
 
 .leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out {
   font-size: 4vw !important;
+  z-index: 1100;
+  display: block;
 }
+
+
 
