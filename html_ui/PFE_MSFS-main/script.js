@@ -56,7 +56,7 @@ var resultBounds = L.latLngBounds(southWestResultBound, northEastResultBound);
 // Creating map options
 var mapOptions = {
   center: [0, 0],
-  minZoom: 2,
+  minZoom: 3,
   zoom: 3,
   maxBounds: bounds,
   maxBoundsViscosity: 1.0,
