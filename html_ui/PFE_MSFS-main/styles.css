@@ -8,16 +8,18 @@
   flex-direction: column;
   transform: translate(-50%, -50%);
   gap:4px;
+  pointer-events: none;
 }
 
 .form #confirm-help-text {
   position: relative;
   font-size: 2vw;
   text-align: center;
-  vertical-align: middle;
-  z-index: 9999;
+
   display:flex;
-  column-gap: 8px;
+}
+
+.form #confirm-help-text * {
   pointer-events: none;
 }
 
@@ -36,6 +38,7 @@
   left: calc(10% + 20px);
   z-index: 9999;
   display:column;
+  pointer-events: none;
 }
 
 #safeTimerDisplay {
@@ -47,9 +50,9 @@
   font-size: 2vw;
 
   z-index: 9999;
-
+vertical-align: middle;
   column-gap: 8px;
-  pointer-events: none;
+  
 }
 
 .form #latitude {
@@ -84,6 +87,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  pointer-events: none;
 }
 
 #map-help-text {
@@ -92,7 +96,7 @@
   text-align: center;
   z-index: 9999;
   margin-bottom:8px;
-  pointer-events: none;
+
 }
 
 #popup-container .popup-box {
@@ -116,6 +120,7 @@
   width: 16vw;
   height: 5vw;
   font-size: 2vw;
+  pointer-events: auto;
 }
 
 #popup-container .popup-box .popup-content {
@@ -159,7 +164,7 @@
   left: 20px;
   z-index: 9999;
   display:flex;
-  column-gap: 8px;
+  column-gap: 2px;
   pointer-events: none;
 }
 /*
@@ -186,12 +191,14 @@
 #help-help-text {
   position: absolute;
   font-size: 2vw;
-  bottom: calc(5% + 1vw);
+  bottom: calc(3% + 8px + 0.5vw);
   left: calc(23% + 15px);
   z-index: 9999;
   display:flex;
-  column-gap: 8px;
+  column-gap: 2px;
   pointer-events: none;
+  vertical-align: middle;
+
 }
 
 #warning-help-text {
@@ -205,4 +212,13 @@
   pointer-events: none;
 }
 
+.arrow-img {
+  width: 2vw;
+  height: 2vw;
+  vertical-align: middle;
+  align-self: center;
+}
 
+#timer-help-text .arrow-img {
+  transform: translate(0,-30%);
+}

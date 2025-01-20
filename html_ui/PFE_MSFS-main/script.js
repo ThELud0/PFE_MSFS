@@ -569,11 +569,13 @@ function startGame() {
 window.onload = function () {
   ShowStartMenu();
   map.zoomControl.remove();
-  L.control.zoom({
+  let zoomElement = L.control.zoom({
     position: 'topleft',
     zoomInText: '<span aria-hidden="false">+</span>',
     zoomOutText: '<span aria-hidden="false">-</span>'
-}).addTo(map);
+  }).addTo(map);
+  zoomElement._container.addEventListener('mousedown', L.DomEvent.stopPropagation);
+  zoomElement._container.addEventListener('mouseup', L.DomEvent.stopPropagation);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -615,20 +617,20 @@ function toggle(button) {
   }
 }
 
-function showUIElements(){
-  document.getElementById("timer-help-text").style.display = "flex";
-  document.getElementById("zoom-help-text").style.display = "flex";
-  document.getElementById("warning-help-text").style.display = "flex";
-  document.getElementById("map-help-text").style.display = "flex";
-  document.getElementById("confirm-help-text").style.display = "flex";
-  document.getElementById("help-help-text").style.display = "flex";
+function showUIElements() {
+  document.getElementById("timer-help-text").style.visibility = "visible";
+  document.getElementById("zoom-help-text").style.visibility = "visible";
+  document.getElementById("warning-help-text").style.visibility = "visible";
+  document.getElementById("map-help-text").style.visibility = "visible";
+  document.getElementById("confirm-help-text").style.visibility = "visible";
+  document.getElementById("help-help-text").style.visibility = "visible";
 }
 
-function hideUIElements(){
-  document.getElementById("timer-help-text").style.display = "none";
-  document.getElementById("zoom-help-text").style.display = "none";
-  document.getElementById("warning-help-text").style.display = "none";
-  document.getElementById("map-help-text").style.display = "none";
-  document.getElementById("confirm-help-text").style.display = "none";
-  document.getElementById("help-help-text").style.display = "none";
+function hideUIElements() {
+  document.getElementById("timer-help-text").style.visibility = "hidden";
+  document.getElementById("zoom-help-text").style.visibility = "hidden";
+  document.getElementById("warning-help-text").style.visibility = "hidden";
+  document.getElementById("map-help-text").style.visibility = "hidden";
+  document.getElementById("confirm-help-text").style.visibility = "hidden";
+  document.getElementById("help-help-text").style.visibility = "hidden";
 }
