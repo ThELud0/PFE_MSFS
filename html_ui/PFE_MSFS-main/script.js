@@ -19,7 +19,7 @@ const chosenLandmarks = [eiffelTower, libertyStatue, bigBen, pyramides, telecomS
 
 const maxScore = 5000;
 const maxRound = 5;
-const timerDuration = 120; //in seconds
+const timerDuration = 180; //in seconds
 
 var markerLatitude;
 var markerLongitude;
@@ -57,7 +57,7 @@ var resultBounds = L.latLngBounds(southWestResultBound, northEastResultBound);
 var mapOptions = {
   center: [0, 0],
   minZoom: 2,
-  zoom: 2,
+  zoom: 3,
   maxBounds: bounds,
   maxBoundsViscosity: 1.0,
 };
@@ -356,8 +356,35 @@ function resultWithMarkerChoice() {
 
   totalDistance += Number(distance);
 
+  let notAccurate = "That's... not very accurate, is it ?"
+  let goodEnough = "Keep going ! Improvement is only a few rounds away !";
+  let notRandom = "Beginner's luck or keen eye ?"
+  let closer = "Getting closer !"
+  let notBad = "Pretty good !";
+  let almostPerfect = "That's as close to perfection as one could get, take all my points !";
+  let excellent = "Excellent !";
+  let perfect = "Geoguessing is an art and you are the artist !"
+
+  let customMessage = '';
+
+  if (distance <= 0.05)
+    customMessage = perfect;
+  else if (distance < 0.5)
+    customMessage = almostPerfect;
+  else if (distance < 50)
+    customMessage = excellent;
+  else if (distance < 500)
+    customMessage = notBad;
+  else if (distance < 2500)
+    customMessage = closer;
+  else if (distance < 5000)
+    customMessage = notRandom;
+  else if (distance <= 10000)
+    customMessage = goodEnough;
+  else customMessage = notAccurate;
+
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">Round ${currentRound}/${maxRound}</br>You chose coordinates (lat,lng) couple: (${markerLatitude}, ${markerLongitude}) which is ${distance} km away from target. You have scored ${score} points (total: ${totalScore}).</div>`;
+  popupBox.innerHTML = `<div class="popup-content">Round ${currentRound}/${maxRound}</br>Your guess was ${distance} km away from your spawn position. You have scored ${score} points (total: ${totalScore}).</br>${customMessage}</div>`;
   /*
   popupMapDiv.className = "popUpMap";
   popupMapDiv.style = "width:90%;height:66vh";*/
@@ -365,7 +392,7 @@ function resultWithMarkerChoice() {
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "Show End Results";
+    currentRound < maxRound ? "Next Round" : "End Results";
 
   document.getElementById("btn").disabled = true;
 
@@ -412,7 +439,7 @@ function resultWithoutMarkerChoice() {
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "Show End Results";
+    currentRound < maxRound ? "Next Round" : "End Results";
 
   //document.getElementById("btn").style.pointerEvents = "none";
   document.getElementById("btn").disabled = true;
@@ -477,7 +504,7 @@ function ShowStartMenu() {
   var closeButton = document.createElement("button");
 
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">Ready ?</div>`;
+  popupBox.innerHTML = `<div class="popup-content">You are about to be teleported to a random place on Earth.</br>Look around, try your best to find out where you appeared and put your guess on this map !</br>Are you ready ?</div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -570,4 +597,38 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------- UI TEXT FUNCTIONS ------------------------------------//
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+function toggle(button) {
+  if (button.value == "OFF") {
+    button.value = "ON";
+    button.style.background = "whitesmoke";
+    showUIElements();
+  } else {
+    button.value = "OFF";
+    button.style.background = "lightgrey";
+    hideUIElements();
+  }
+}
+
+function showUIElements(){
+  document.getElementById("timer-help-text").style.display = "flex";
+  document.getElementById("zoom-help-text").style.display = "flex";
+  document.getElementById("warning-help-text").style.display = "flex";
+  document.getElementById("map-help-text").style.display = "flex";
+  document.getElementById("confirm-help-text").style.display = "flex";
+  document.getElementById("help-help-text").style.display = "flex";
+}
+
+function hideUIElements(){
+  document.getElementById("timer-help-text").style.display = "none";
+  document.getElementById("zoom-help-text").style.display = "none";
+  document.getElementById("warning-help-text").style.display = "none";
+  document.getElementById("map-help-text").style.display = "none";
+  document.getElementById("confirm-help-text").style.display = "none";
+  document.getElementById("help-help-text").style.display = "none";
 }

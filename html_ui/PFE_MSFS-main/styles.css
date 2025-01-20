@@ -1,26 +1,55 @@
 .form {
   position: absolute;
   left: 50%;
-  bottom: 15%;
+  bottom: calc(5% + 20px);
   z-index: 9999;
   font-size: 2vw;
   display: flex;
   flex-direction: column;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
+  gap:4px;
+}
+
+.form #confirm-help-text {
+  position: relative;
+  font-size: 2vw;
+  text-align: center;
+  vertical-align: middle;
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+  pointer-events: none;
 }
 
 .form #btn {
+  position:relative;
   width: 16vw;
   height: 5vw;
   font-size: 2vw;
+  left:50%;
+  transform: translate(-50%, 0);
+}
+
+.timer {
+  position: absolute;
+  top: calc(2% + 10px);
+  left: calc(10% + 20px);
+  z-index: 9999;
+  display:column;
 }
 
 #safeTimerDisplay {
-  position: absolute;
   font-size: 3vw;
-  top: 5%;
-  left: 12%;
+}
+
+#timer-help-text {
+  position: relative;
+  font-size: 2vw;
+
   z-index: 9999;
+
+  column-gap: 8px;
+  pointer-events: none;
 }
 
 .form #latitude {
@@ -57,11 +86,20 @@
   z-index: 9999;
 }
 
+#map-help-text {
+
+  font-size: 2vw;
+  text-align: center;
+  z-index: 9999;
+  margin-bottom:8px;
+  pointer-events: none;
+}
+
 #popup-container .popup-box {
   font-size: 2vw;
   align-items: center;
   justify-items: center;
-  background-color: rgb(255 255 255 / 0.5);
+  background-color: rgb(255 255 255 / 0.5) !important;
   padding: 10px;
 }
 
@@ -84,6 +122,8 @@
   margin: 20px;
 }
 
+
+
 .leaflet-touch .leaflet-bar a {
   width: 5vw !important;
   height: 5vw !important;
@@ -96,5 +136,73 @@
   display: block;
 }
 
+#help-control {
+  position: absolute;
+  font-size: 3vw;
+  bottom: 4%;
+  left: 4%;
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+}
+
+#help-control #help-button{
+  font-size: 2vw;
+  border-radius: 34px;
+}
+
+
+#zoom-help-text {
+  position: absolute;
+  font-size: 2vw;
+  top: calc(11vw + 20px);
+  left: 20px;
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+  pointer-events: none;
+}
+/*
+#round-help-text {
+  position: absolute;
+  font-size: 2vw;
+  bottom: 4%;
+  left: 4%;
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+}
+#score-help-text {
+  position: absolute;
+  font-size: 2vw;
+  bottom: 4%;
+  left: 4%;
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+}*/
+
+
+#help-help-text {
+  position: absolute;
+  font-size: 2vw;
+  bottom: calc(5% + 1vw);
+  left: calc(23% + 15px);
+  z-index: 9999;
+  display:flex;
+  column-gap: 8px;
+  pointer-events: none;
+}
+
+#warning-help-text {
+  position: absolute;
+  font-size: calc(5px + 1.3vw);
+  top: 1%;
+  right: 1%;
+  z-index: 9999;
+  text-align: end;
+  display:flex;
+  pointer-events: none;
+}
 
 
