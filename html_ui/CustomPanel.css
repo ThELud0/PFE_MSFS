@@ -10,14 +10,14 @@ ingame-ui#CustomPanel {
   width: 100% !important;
   /*border: 2px solid blue !important;*/
 }
-/*
+
 ingame-ui#CustomPanel #MainDisplay.hidden {
   display: none;
 }
 
 ingame-ui#CustomPanel #Footer.hidden {
   display: none;
-}*/
+}
 
 ingame-ui#CustomPanel #CustomPanelWrap {
   display: flex;
@@ -31,6 +31,7 @@ ingame-ui#CustomPanel #CustomPanelWrap {
   align-items: stretch !important;
   flex: 1 1 auto !important;
 }
+
 ingame-ui#CustomPanel #CustomPanelWrap #CustomPanelIframe {
   flex: 1 1 auto !important;
   border: 0;
@@ -48,6 +49,7 @@ ingame-ui#CustomPanel .ingameUiContent {
   align-items: stretch !important;
   flex: 1 1 auto !important;
 }
+
 ingame-ui#CustomPanel .ingameUiWrapper {
   /*border: 2px solid yellow !important;*/
   display: flex !important;

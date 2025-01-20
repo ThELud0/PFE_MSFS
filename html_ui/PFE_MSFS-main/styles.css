@@ -103,8 +103,8 @@ vertical-align: middle;
   font-size: 2vw;
   align-items: center;
   justify-items: center;
-  background-color: rgb(255 255 255 / 0.5) !important;
-  border:solid black 1px;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+ /* border:solid black 1px;*/
   padding: 10px;
 }
 

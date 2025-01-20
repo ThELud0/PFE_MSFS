@@ -504,7 +504,7 @@ function ShowStartMenu() {
   var closeButton = document.createElement("button");
 
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">You are about to be teleported to a random place on Earth.</br>Look around, try your best to find out where you appeared and put your guess on this map !</br>Are you ready ?</div>`;
+  popupBox.innerHTML = `<div class="popup-content">You are about to be teleported to a random place on Earth.</br>Look around, try your best to find out where you appeared and put your guess on this map!</br>Are you ready ?</div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -576,7 +576,7 @@ window.onload = function () {
   }).addTo(map);
   zoomElement._container.addEventListener('mousedown', L.DomEvent.stopPropagation);
   zoomElement._container.addEventListener('mouseup', L.DomEvent.stopPropagation);
-  parent.updateBackgroundColor();
+  //parent.updateBackgroundColor();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
