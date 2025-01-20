@@ -576,6 +576,7 @@ window.onload = function () {
   }).addTo(map);
   zoomElement._container.addEventListener('mousedown', L.DomEvent.stopPropagation);
   zoomElement._container.addEventListener('mouseup', L.DomEvent.stopPropagation);
+  parent.updateBackgroundColor();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////

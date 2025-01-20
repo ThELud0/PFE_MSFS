@@ -104,6 +104,7 @@ vertical-align: middle;
   align-items: center;
   justify-items: center;
   background-color: rgb(255 255 255 / 0.5) !important;
+  border:solid black 1px;
   padding: 10px;
 }
 
@@ -143,7 +144,7 @@ vertical-align: middle;
 
 #help-control {
   position: absolute;
-  font-size: 3vw;
+  font-size: 2vw;
   bottom: 4%;
   left: 4%;
   z-index: 9999;
@@ -152,7 +153,7 @@ vertical-align: middle;
 }
 
 #help-control #help-button{
-  font-size: 2vw;
+  font-size: 1.5vw;
   border-radius: 34px;
 }
 
@@ -191,8 +192,8 @@ vertical-align: middle;
 #help-help-text {
   position: absolute;
   font-size: 2vw;
-  bottom: calc(3% + 8px + 0.5vw);
-  left: calc(23% + 15px);
+  bottom: calc(3% + 10px);
+  left: calc(18% + 15px);
   z-index: 9999;
   display:flex;
   column-gap: 2px;
@@ -203,7 +204,7 @@ vertical-align: middle;
 
 #warning-help-text {
   position: absolute;
-  font-size: calc(5px + 1.3vw);
+  font-size: 2vw;;
   top: 1%;
   right: 1%;
   z-index: 9999;
