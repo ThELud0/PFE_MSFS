@@ -500,7 +500,7 @@ function ShowEndResults() {
 function ShowStartMenu() {
   var popupContainer = document.getElementById("popup-container");
   var popupBox = document.createElement("div");
-
+  var modeSelector = document.createElement("div");
   var closeButton = document.createElement("button");
 
   popupBox.className = "popup-box";
@@ -510,18 +510,49 @@ function ShowStartMenu() {
   closeButton.type = "button";
   closeButton.innerHTML = "Start Game";
 
-  //document.getElementById("btn").style.pointerEvents = "none";
+  modeSelector.className = "mode-selector-div";
+  modeSelector.style.pointerEvents = "auto";
+  modeSelector.innerHTML = `
+    <label class="tooltip-trigger" data-tooltip="If on, you will be teleported to the same set of locations every game.">
+      <input class="input-coding" type="checkbox" id="coding" value="coding" />
+      Discovery Mode
+    </label>`;
+
+
   document.getElementById("btn").disabled = true;
   mapInteractable = false;
+  popupBox.appendChild(modeSelector);
   popupBox.appendChild(closeButton);
+
   popupContainer.appendChild(popupBox);
+
+/*
+  let checkbox = document.getElementById("coding");
+  if (checkbox.checked) {
+    console.log("checked");
+  } else {
+    console.log("not checked");
+  }
+
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+      console.log("checked");
+    } else {
+      console.log("not checked");
+    }
+  });*/
 
   closeButton.addEventListener("click", function () {
     startGame();
     mapInteractable = true;
     popupContainer.removeChild(popupBox);
   });
+
 }
+
+
+  
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //-------------------------------------- TIMER METHODS -------------------------------------//
