@@ -27,36 +27,37 @@
         <input type="text" id="longitude" placeholder="longitude">
         <input type="text" id="isinvr" placeholder="bool">
         <input type="text" id="ctd" placeholder="countdown"-->
-        <div id="confirm-help-text">Skip the remaining time of the round by confirming your choice<img class="arrow-img" src="bottom_right_arrow.png" alt=""></div>
+        <div id="confirm-help-text"><img class="confirm-help-img" src="confirm_help.png" alt=""></div>
         
         <button id="btn" type="button">Confirm choice</button>
     </form>
     <div class="timer">
         <div id="safeTimerDisplay">3:00</div>
-        <div id="timer-help-text"><img class="arrow-img" src="top_left_arrow.png" alt="">The round will end when this timer hits zero</div>
+        <div id="timer-help-text"><img class="timer-help-img" src="timer_help.png" alt=""></div>
     </div>
     <div id="popup-container">
         <div id="map-help-text">Hold down the map and drag it around to explore it</div>
     </div>
-    <div id="roundDisplayDiv"></div>
+    <div id="roundDisplayDiv">Round 1/5</div>
+    <div id="scoreDisplayDiv">Total score: 0</div>
 
     <div id="help-control">
-        <div id="help-control-text">Textual help</div>
-        <input type="button" id="help-button" value="ON" style="color:black;background:whitesmoke;"
-            onclick="toggle(this);">
+        <button id="help-button"  onclick="toggle(this);">
+            <img src="information_icon.png" alt="" id="button-icon">
+          </button>
     </div>
-    <div id="help-help-text"><img class="arrow-img" src="bottom_arrow.png" alt="">Hide all the UI help elements by toggling this off</div>
-    <div id="zoom-help-text"><img class="arrow-img" src="top_left_arrow.png" alt="">Click on the "+" to zoom or "-" to dezoom on the map</br>You can also use your mouse
-        wheel</div>
+    
+    <div id="zoom-help-text"><img class="zoom-help-img" src="zoom_help.png" alt=""></div>
 
 
     <!--div id="round-help-text">Your current round</div>
+    <div id="help-help-text"><img class="arrow-img" src="bottom_arrow.png" alt="">Hide all the UI help elements by toggling this off</div>
     <div id="score-help-text">The score you have accumulated so far</div-->
 
 
    
-    <div id="warning-help-text"><img class="arrow-img" src="warning.png" alt="">Minimize to hide this window, do not close it or you will lose progress<img class="arrow-img" src="warning.png" alt=""></div>
-    <div class="license">&copy;<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a></div>
+    <div id="warning-help-text"><img class="warning-help-img" src="warning_help.png" alt=""></div>
+
 
 
 

@@ -1,6 +1,5 @@
 const browserOnly = false; //FlightSim methods will break the code when they fail; if trying out code in browser, set this to true to not break other code
 
-
 const northAmerica = { topleft: [70, -166], botright: [18, -67] };
 const southAmerica = { topleft: [8.6, -83], botright: [-55, -43] };
 const europeAndAfrica = { topleft: [68, -8.6], botright: [-35, 45] };
@@ -10,12 +9,18 @@ const oceania = { topleft: [5, 100], botright: [-44, 155] };
 const land = [northAmerica, southAmerica, europeAndAfrica, asia, oceania];
 
 const eiffelTower = { latitude: 48.857308, longitude: 2.294126 };
-const libertyStatue = { latitude: 40.691100, longitude: -74.047628 };
+const libertyStatue = { latitude: 40.6911, longitude: -74.047628 };
 const bigBen = { latitude: 51.500388, longitude: -0.124305 };
 const pyramides = { latitude: 29.976022, longitude: 31.132387 };
 const telecomSudparis = { latitude: 48.623716, longitude: 2.443632 };
 
-const chosenLandmarks = [eiffelTower, libertyStatue, bigBen, pyramides, telecomSudparis];
+const chosenLandmarks = [
+  eiffelTower,
+  libertyStatue,
+  bigBen,
+  pyramides,
+  telecomSudparis,
+];
 
 const maxScore = 5000;
 const maxRound = 5;
@@ -69,7 +74,6 @@ var flagIcon = L.icon({
   iconAnchor: [1, 48],
 });
 
-
 function setIsInVR(state) {
   isInVr = state;
   document.getElementById("isinvr").value = isInVr;
@@ -122,7 +126,6 @@ map.on("click", (event) => {
     putDownMarker(event);
 });*/
 
-
 map.on("mousedown", (event) => {
   if (isInVr) {
     clickCountdown = 0;
@@ -130,23 +133,19 @@ map.on("mousedown", (event) => {
     clickTimer = setInterval(function () {
       clickCountdown += 0.05;
       document.getElementById("ctd").value = 1;
-      if (clickCountdown >= 0.15)
-        clearInterval(clickTimer);
+      if (clickCountdown >= 0.15) clearInterval(clickTimer);
     }, 50);
-
   }
 });
 
 map.on("mouseup", (event) => {
   if (isInVr) {
-
     if (clickCountdown <= 0.1) {
       putDownMarker(event);
     }
     clearInterval(clickTimer);
     clickCountdown = 0;
   }
-
 });
 
 map.on("mouseout", (event) => {
@@ -155,8 +154,6 @@ map.on("mouseout", (event) => {
     clickCountdown = 0;
   }
 });
-
-
 
 // Function to display a marker at var coordinates in the div and on map
 function displayCoordinates() {
@@ -234,7 +231,6 @@ function generateNewTarget() {
   if (!browserOnly)
     parent.setPlanePosition(coordinates.latitude, coordinates.longitude);
 
-
   //displayCoordinates();
 }
 /*
@@ -272,6 +268,7 @@ function resetMarker() {
 document.getElementById("btn").addEventListener("click", function () {
   if (marker != null) {
     resultWithMarkerChoice();
+    hideConfirmButton();
     clearInterval(timer);
   }
 });
@@ -305,7 +302,10 @@ function clearAnswer() {
 
 function displayRound() {
   var roundDisplayBox = document.getElementById("roundDisplayDiv");
-  roundDisplayBox.innerHTML = `<div class="roundDisplay">Round ${currentRound}/${maxRound}</br>Total score: ${totalScore}</div>`;
+  roundDisplayBox.innerHTML = `<div class="roundDisplay">Round ${currentRound}/${maxRound}</div>`;
+
+  var scoreDisplayBox = document.getElementById("scoreDisplayDiv");
+  scoreDisplayBox.innerHTML = `<div class="scoreDisplay">Total score: ${totalScore}</div>`;
 }
 
 function topPercentileCalculation(score) {
@@ -328,7 +328,7 @@ function resultWithMarkerChoice() {
   var closeButton = document.createElement("button");
 
   //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
-
+  hideConfirmButton();
   markerLongitude =
     markerLongitude < 0
       ? ((markerLongitude - 180) % 360) + 180
@@ -356,35 +356,29 @@ function resultWithMarkerChoice() {
 
   totalDistance += Number(distance);
 
-  let notAccurate = "That's... not very accurate, is it ?"
+  let notAccurate = "That's... not very accurate, is it ?";
   let goodEnough = "Keep going ! Improvement is only a few rounds away !";
-  let notRandom = "Beginner's luck or keen eye ?"
-  let closer = "Getting closer !"
+  let notRandom = "Beginner's luck or keen eye ?";
+  let closer = "Getting closer !";
   let notBad = "Pretty good !";
-  let almostPerfect = "That's as close to perfection as one could get, take all my points !";
+  let almostPerfect =
+    "That's as close to perfection as one could get, take all my points !";
   let excellent = "Excellent !";
-  let perfect = "Geoguessing is an art and you are the artist !"
+  let perfect = "Geoguessing is an art and you are the artist !";
 
-  let customMessage = '';
+  let customMessage = "";
 
-  if (distance <= 0.05)
-    customMessage = perfect;
-  else if (distance < 0.5)
-    customMessage = almostPerfect;
-  else if (distance < 50)
-    customMessage = excellent;
-  else if (distance < 500)
-    customMessage = notBad;
-  else if (distance < 2500)
-    customMessage = closer;
-  else if (distance < 5000)
-    customMessage = notRandom;
-  else if (distance <= 10000)
-    customMessage = goodEnough;
+  if (distance <= 0.05) customMessage = perfect;
+  else if (distance < 0.5) customMessage = almostPerfect;
+  else if (distance < 50) customMessage = excellent;
+  else if (distance < 500) customMessage = notBad;
+  else if (distance < 2500) customMessage = closer;
+  else if (distance < 5000) customMessage = notRandom;
+  else if (distance <= 10000) customMessage = goodEnough;
   else customMessage = notAccurate;
 
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">Round ${currentRound}/${maxRound}</br>Your guess was ${distance} km away from your spawn position. You have scored ${score} points (total: ${totalScore}).</br>${customMessage}</div>`;
+  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content"><div class="line-separator"></div>Your guess was</br><h1>${distance} km away</h1></br>from your spawn position.</br></br>You have scored </br><h1>${score} points (total: ${totalScore}).</h1></br>${customMessage}</div>`;
   /*
   popupMapDiv.className = "popUpMap";
   popupMapDiv.style = "width:90%;height:66vh";*/
@@ -415,6 +409,7 @@ function resultWithMarkerChoice() {
       currentRound++;
       generateNewTarget();
       startTimer();
+      showConfirmButton();
       mapInteractable = true;
       /*
       if (!browserOnly)
@@ -432,9 +427,9 @@ function resultWithoutMarkerChoice() {
   var popupBox = document.createElement("div");
 
   var closeButton = document.createElement("button");
-
+  hideConfirmButton();
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">Round ${currentRound}/${maxRound}</br>Time out! You did not make any guess, no points for you this round! (total: ${totalScore})</div>`;
+  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">Time out!</br>You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -452,10 +447,10 @@ function resultWithoutMarkerChoice() {
       currentRound++;
       generateNewTarget();
       startTimer();
+      showConfirmButton();
       /*
       if (!browserOnly)
         parent.checkIfInVR();*/
-
     } else ShowEndResults();
     displayRound();
     mapInteractable = true;
@@ -474,10 +469,16 @@ function ShowEndResults() {
 
   var topBeat = topPercentileCalculation(totalScore);
 
-  popupBox.innerHTML = `<div class="popup-content">Game end !</br>Congratulations ! You scored a total of ${totalScore} points and beat ${topBeat}% of players. </br>Average guess time: ${totalGuessTime / maxRound
-    } seconds (Total time: ${totalGuessTime} seconds)
-  <br/>Average distance from marker: ${totalDistance / maxRound
-    }km (Total distance: ${totalDistance}km)</div>`;
+  let numbersOfDecimalsBis = totalDistance > 10 ? 0 : 3;
+
+  let numbersOfDecimalsAverage = (totalDistance / maxRound) > 10 ? 1 : 3;
+
+  popupBox.innerHTML = `<h1>Game end !</h1><div class="popup-content"></br>Congratulations !</br>You scored a total of <h1>${totalScore} points</h1> and beat <h1>${topBeat}% of players</h1>.</br></br>Average guess time: <h1>${
+    totalGuessTime / maxRound
+  } seconds</h1><br/>(Total time: ${totalGuessTime} seconds)
+  <br/><br/>Average distance from marker: <h1>${
+    (totalDistance / maxRound).toFixed(numbersOfDecimalsAverage)
+  }km</h1><br/>(Total distance: ${totalDistance.toFixed(numbersOfDecimalsBis)}km)</div>`;
   mapInteractable = false;
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -488,6 +489,7 @@ function ShowEndResults() {
 
   popupBox.appendChild(closeButton);
   popupContainer.appendChild(popupBox);
+  hideConfirmButton();
 
   closeButton.addEventListener("click", function () {
     startGame();
@@ -504,7 +506,7 @@ function ShowStartMenu() {
   var closeButton = document.createElement("button");
 
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<div class="popup-content">You are about to be teleported to a random place on Earth.</br>Look around, try your best to find out where you appeared and put your guess on this map!</br>Are you ready ?</div>`;
+  popupBox.innerHTML = `<div class="popup-content"></br>You are about to be teleported to a random place on Earth.</br></br>Look around, try your best to find out where you appeared</br>and put your guess on this map!</br></br>Are you ready ?</div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -513,11 +515,11 @@ function ShowStartMenu() {
   modeSelector.className = "mode-selector-div";
   modeSelector.style.pointerEvents = "auto";
   modeSelector.innerHTML = `
-    <label class="tooltip-trigger" data-tooltip="If on, you will be teleported to the same set of locations every game.">
+    <label class="tooltip-trigger">
       <input class="input-coding" type="checkbox" id="coding" value="coding" />
       Discovery Mode
+      <div class="tooltip-content"> If on, you will be teleported to the</br>same set of locations every game.</div>
     </label>`;
-
 
   document.getElementById("btn").disabled = true;
   mapInteractable = false;
@@ -525,8 +527,9 @@ function ShowStartMenu() {
   popupBox.appendChild(closeButton);
 
   popupContainer.appendChild(popupBox);
+  hideConfirmButton();
 
-/*
+  /*
   let checkbox = document.getElementById("coding");
   if (checkbox.checked) {
     console.log("checked");
@@ -547,12 +550,7 @@ function ShowStartMenu() {
     mapInteractable = true;
     popupContainer.removeChild(popupBox);
   });
-
 }
-
-
-  
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //-------------------------------------- TIMER METHODS -------------------------------------//
@@ -591,23 +589,33 @@ function startGame() {
   generateNewTarget();
   displayRound();
   startTimer();
+  showConfirmButton();
   /*
   if (!browserOnly)
     parent.checkIfInVR();*/
-
 }
 
 window.onload = function () {
   ShowStartMenu();
   map.zoomControl.remove();
-  let zoomElement = L.control.zoom({
-    position: 'topleft',
-    zoomInText: '<span aria-hidden="false">+</span>',
-    zoomOutText: '<span aria-hidden="false">-</span>'
-  }).addTo(map);
-  zoomElement._container.addEventListener('mousedown', L.DomEvent.stopPropagation);
-  zoomElement._container.addEventListener('mouseup', L.DomEvent.stopPropagation);
+  let zoomElement = L.control
+    .zoom({
+      position: "topleft",
+      zoomInText: '<span aria-hidden="false">+</span>',
+      zoomOutText: '<span aria-hidden="false">-</span>',
+    })
+    .addTo(map);
+  zoomElement._container.addEventListener(
+    "mousedown",
+    L.DomEvent.stopPropagation
+  );
+  zoomElement._container.addEventListener(
+    "mouseup",
+    L.DomEvent.stopPropagation
+  );
   //parent.updateBackgroundColor();
+  addAttribution();
+  setHelpDefaultState();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,9 +629,9 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-    Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c; // Distance in km
   return d;
@@ -638,31 +646,68 @@ function deg2rad(deg) {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 function toggle(button) {
-  if (button.value == "OFF") {
-    button.value = "ON";
-    button.style.background = "whitesmoke";
+  const buttonIcon = document.getElementById("button-icon");
+  if (button.classList.contains("off")) {
+    button.classList.remove("off");
+    button.classList.add("on");
     showUIElements();
   } else {
-    button.value = "OFF";
-    button.style.background = "lightgrey";
+    button.classList.add("off");
+    button.classList.remove("on");
     hideUIElements();
   }
 }
 
+function setHelpDefaultState() {
+  const button = document.getElementById("help-button");
+  const buttonIcon = document.getElementById("button-icon");
+  button.classList.add("off");
+  hideUIElements();
+}
+
+let UIHidden = true;
+let ConfirmHidden = true;
 function showUIElements() {
+  UIHidden = false;
   document.getElementById("timer-help-text").style.visibility = "visible";
   document.getElementById("zoom-help-text").style.visibility = "visible";
   document.getElementById("warning-help-text").style.visibility = "visible";
-  document.getElementById("map-help-text").style.visibility = "visible";
+  if (!ConfirmHidden)
+    document.getElementById("map-help-text").style.visibility = "visible";
   document.getElementById("confirm-help-text").style.visibility = "visible";
   document.getElementById("help-help-text").style.visibility = "visible";
 }
 
 function hideUIElements() {
+  UIHidden = true;
   document.getElementById("timer-help-text").style.visibility = "hidden";
   document.getElementById("zoom-help-text").style.visibility = "hidden";
   document.getElementById("warning-help-text").style.visibility = "hidden";
   document.getElementById("map-help-text").style.visibility = "hidden";
   document.getElementById("confirm-help-text").style.visibility = "hidden";
   document.getElementById("help-help-text").style.visibility = "hidden";
+}
+
+function addAttribution() {
+  const parentDiv = document.querySelector(".leaflet-control-attribution");
+  //parentDiv.textContent = "ahh";
+  const separation = document.createElement("a");
+  separation.textContent = " | ";
+  const newAnchor = document.createElement("a");
+  newAnchor.textContent = "OpenStreetMap";
+  newAnchor.href = "https://www.openstreetmap.org/copyright";
+  parentDiv.appendChild(separation);
+  parentDiv.appendChild(newAnchor);
+}
+
+function hideConfirmButton() {
+  ConfirmHidden = true;
+  document.getElementById("map-help-text").style.visibility = "hidden";
+  document.querySelector(".form").style.display = "none";
+}
+function showConfirmButton() {
+  ConfirmHidden = false;
+  if (!UIHidden)
+    document.getElementById("map-help-text").style.visibility = "visible";
+  document.querySelector(".form").style.display = "block";
 }

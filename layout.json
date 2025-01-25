@@ -36,23 +36,28 @@
       "date": 132453435271410222
     },
     {
-      "path": "html_ui/PFE_MSFS-main/warning.png",
-      "size": 26620,
+      "path": "html_ui/PFE_MSFS-main/confirm_help.png",
+      "size": 105840,
       "date": 132453435271410222
     },
     {
-      "path": "html_ui/PFE_MSFS-main/bottom_arrow.png",
-      "size": 8484,
+      "path": "html_ui/PFE_MSFS-main/information_icon.png",
+      "size": 28160,
       "date": 132453435271410222
     },
     {
-      "path": "html_ui/PFE_MSFS-main/top_left_arrow.png",
-      "size": 12293,
+      "path": "html_ui/PFE_MSFS-main/timer_help.png",
+      "size": 65891,
       "date": 132453435271410222
     },
     {
-      "path": "html_ui/PFE_MSFS-main/bottom_right_arrow.png",
-      "size": 12152,
+      "path": "html_ui/PFE_MSFS-main/warning_help.png",
+      "size": 103789,
+      "date": 132453435271410222
+    },
+    {
+      "path": "html_ui/PFE_MSFS-main/zoom_help.png",
+      "size": 98943,
       "date": 132453435271410222
     },
     {
