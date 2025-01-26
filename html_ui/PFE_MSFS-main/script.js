@@ -5,6 +5,35 @@ const southAmerica = { topleft: [8.6, -83], botright: [-55, -43] };
 const europeAndAfrica = { topleft: [68, -8.6], botright: [-35, 45] };
 const asia = { topleft: [72, 45], botright: [14.8, 146] };
 const oceania = { topleft: [5, 100], botright: [-44, 155] };
+const randomLandArea = []
+
+// America Land Areas
+//North America
+randomLandArea.push({ topleft: [69.19, -160.22], botright: [59.93, -128.61] });
+randomLandArea.push({ topleft: [67.44, -129.32], botright: [59.98, -95.23] });
+randomLandArea.push({ topleft: [59.93, -133.85], botright: [54.57, -95.48] });
+randomLandArea.push({ topleft: [54.57, -125.87], botright: [48.75, -83] });
+randomLandArea.push({ topleft: [57.94, -75.98], botright: [50.62, -63.77] });
+randomLandArea.push({ topleft: [50.96, -83], botright: [41.64, -71.06] }); // big usa/canada lakes in there
+randomLandArea.push({ topleft: [48.75, -122.09], botright: [37, -76.24] }); // bigger usa lakes in there
+randomLandArea.push({ topleft: [37, -119.02], botright: [34.08, -79.34] });
+randomLandArea.push({ topleft: [34.08, -118.47], botright: [33.18, -79.4] });
+randomLandArea.push({ topleft: [33.18, -116.51], botright: [31.77, -81.47] });
+randomLandArea.push({ topleft: [31.77, -105.11], botright: [19.7, -97.55] });
+//South America
+randomLandArea.push({ topleft: [19.7, -102.6], botright: [16.03, -88.9] }); // some surrounding sea around mexico in there too
+randomLandArea.push({ topleft: [16.03, -91.93], botright: [12.84, -83.59] });
+randomLandArea.push({ topleft: [12.84, -86.33], botright: [9.35, -83.59] });
+randomLandArea.push({ topleft: [9.35, -83.59], botright: [6.32, -60.66] });
+randomLandArea.push({ topleft: [4.73, -77.15], botright: [-12.22, -51.35] });
+randomLandArea.push({ topleft: [-3.01, -51.35], botright: [-23, -41.91] });
+randomLandArea.push({ topleft: [-12.22, -70.15], botright: [-34.61, -54.07] });
+randomLandArea.push({ topleft: [-34.61, -71.64], botright: [-41.2, -62.59] });
+randomLandArea.push({ topleft: [-41.2, -73.83], botright: [-55.09, -68.04] });
+//Groenland
+randomLandArea.push({ topleft: [, ], botright: [, ] });
+
+
 
 const land = [northAmerica, southAmerica, europeAndAfrica, asia, oceania];
 
@@ -13,14 +42,41 @@ const libertyStatue = { latitude: 40.6911, longitude: -74.047628 };
 const bigBen = { latitude: 51.500388, longitude: -0.124305 };
 const pyramides = { latitude: 29.976022, longitude: 31.132387 };
 const telecomSudparis = { latitude: 48.623716, longitude: 2.443632 };
+const greatWallChina = {latitude:40.43203833604343, longitude:116.5704392693513};
+const greatCanyon = {latitude: 36.29895670157174,longitude: -112.3462442354791}; 
+const niagaraFalls = {latitude: 43.08760331208694, longitude: -79.06552582283697};
+const colosseum = {latitude: 41.89206671095406, longitude: 12.491039010441456};
+const tajMahal = {latitude: 27.1722021135075,longitude:  78.04533863272798};
+const acropolis = {latitude: 37.97176908768301, longitude: 23.72404331140337};
+const basilica = {latitude: 41.40260777338642, longitude: 2.174194844167786};
+const goldenGateBridge = {latitude: 37.80457130090765, longitude: -122.44579473794794};
+const banff = {latitude: 51.17801485320009, longitude: -115.5512131704649};
+const stoneHenge = {latitude: 51.18158663107134, longitude: -1.8301657694558358};
+const dubai = {latitude: 25.093509207449106, longitude: 55.157423667532534};
+const sydneyOperaHouse = {latitude: -33.85755346008194, longitude: 151.21509537241187};
 
-const chosenLandmarks = [
+
+
+const listOfLandmarks = [
   eiffelTower,
   libertyStatue,
   bigBen,
   pyramides,
-  telecomSudparis,
+  greatWallChina,
+  greatCanyon,
+  niagaraFalls,
+  colosseum,
+  tajMahal,
+  acropolis,
+  basilica,
+  goldenGateBridge,
+  banff,
+  stoneHenge,
+  dubai,
+  sydneyOperaHouse
 ];
+
+var chosenLandmarks;
 
 const maxScore = 5000;
 const maxRound = 5;
@@ -184,17 +240,17 @@ function generateRandomCoordinates() {
 }
 
 function generateRandomLandCoordinates() {
-  // Select a random continent from the land array
+
   const chosenContinent = land[Math.floor(Math.random() * land.length)];
   //const chosenContinent = land[0];
 
-  // Extract latitude and longitude ranges
+
   const minLatitude = chosenContinent.topleft[0];
   const maxLatitude = chosenContinent.botright[0];
   const minLongitude = chosenContinent.topleft[1];
   const maxLongitude = chosenContinent.botright[1];
 
-  // Generate random latitude and longitude within the ranges
+
   const latitude = (
     Math.random() * (maxLatitude - minLatitude) +
     minLatitude
@@ -207,12 +263,24 @@ function generateRandomLandCoordinates() {
   return { latitude, longitude };
 }
 
+function chooseFromLandmarks(array, count) {
+  const copy = [...array]; // Make a copy to avoid modifying the original array
+  const selected = [];
+  
+  while (selected.length < count && copy.length > 0) {
+    const randomIndex = Math.floor(Math.random() * copy.length);
+    selected.push(copy.splice(randomIndex, 1)[0]); // Remove and add to the selected array
+  }
+  
+  return selected;
+}
+
 function generateChosenLandCoordinates() {
-  // Select a random continent from the land array
+
   const chosenContinent = chosenLandmarks[currentRound - 1];
   //const chosenContinent = land[0];
 
-  // Generate random latitude and longitude within the ranges
+
   const latitude = chosenContinent.latitude;
   const longitude = chosenContinent.longitude;
 
@@ -523,7 +591,7 @@ function ShowStartMenu() {
 
   document.getElementById("btn").disabled = true;
   mapInteractable = false;
-  popupBox.appendChild(modeSelector);
+  //popupBox.appendChild(modeSelector);
   popupBox.appendChild(closeButton);
 
   popupContainer.appendChild(popupBox);
@@ -586,6 +654,7 @@ function startGame() {
 
   resetMarker();
   document.getElementById("btn").disabled = true;
+  chosenLandmarks = chooseFromLandmarks(listOfLandmarks,5);
   generateNewTarget();
   displayRound();
   startTimer();
