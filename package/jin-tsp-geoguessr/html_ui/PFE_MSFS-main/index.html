@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Geoguessing Mode</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="styles.css" />
+    <!--script type="text/javascript" src="/JS/coherent.js"></script>
+    <script type="text/javascript" src="/JS/common.js"></script>
+    <script type="text/javascript" src="/JS/simvar.js"></script>
+    <script type="text/javascript" src="/JS/dataStorage.js"></script>
+    <script type="text/javascript" src="/JS/buttons.js"></script>
+    <script type="text/javascript" src="/JS/Services/ToolBarPanels.js"></script>
+    <script type="text/javascript" src="/Pages/VCockpit/Instruments/Shared/BaseInstrument.js"></script-->
+
+</head>
+
+<body style="background-color: rgb(57 65 73);">
+
+    <div id="map" style="width: 100%; height: 97.5vh;cursor:default"></div>
+
+    <form action="" class="form">
+        <!--input type="text" id="latitude" placeholder="latitude">
+        <input type="text" id="longitude" placeholder="longitude">
+        <input type="text" id="isinvr" placeholder="bool">
+        <input type="text" id="ctd" placeholder="countdown"-->
+        <div id="confirm-help-text"><img class="confirm-help-img" src="confirm_help.png" alt=""></div>
+        
+        <button id="btn" type="button">Confirm choice</button>
+    </form>
+    <div class="timer">
+        <div id="safeTimerDisplay">3:00</div>
+        <div id="timer-help-text"><img class="timer-help-img" src="timer_help.png" alt=""></div>
+    </div>
+    <div id="popup-container">
+        <div id="map-help-text">Hold down the map and drag it around to explore it</div>
+    </div>
+    <div id="roundDisplayDiv">Round 1/5</div>
+    <div id="scoreDisplayDiv">Total score: 0</div>
+
+    <div id="help-control">
+        <button id="help-button"  onclick="toggle(this);">
+            <img src="information_icon.png" alt="" id="button-icon">
+          </button>
+    </div>
+    
+    <div id="zoom-help-text"><img class="zoom-help-img" src="zoom_help.png" alt=""></div>
+
+
+    <!--div id="round-help-text">Your current round</div>
+    <div id="help-help-text"><img class="arrow-img" src="bottom_arrow.png" alt="">Hide all the UI help elements by toggling this off</div>
+    <div id="score-help-text">The score you have accumulated so far</div-->
+
+
+   
+    <div id="warning-help-text"><img class="warning-help-img" src="warning_help.png" alt=""></div>
+
+
+
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

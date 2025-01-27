@@ -1,0 +1,139 @@
+{
+    "content": [
+        {
+            "path": "html_ui/CustomPanel.css",
+            "size": 1546,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/CustomPanel.html",
+            "size": 3434,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/CustomPanel.js",
+            "size": 4839,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/icons/toolbar/ICON.svg",
+            "size": 1024,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/Pages/MissionStartup/MissionStartup.css",
+            "size": 2044,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/Pages/MissionStartup/MissionStartup.html",
+            "size": 1394,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/Pages/MissionStartup/MissionStartup.js",
+            "size": 6919,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/confirm_help.png",
+            "size": 105840,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/flag_marker.png",
+            "size": 7425,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/index.html",
+            "size": 2744,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/information_icon.png",
+            "size": 28160,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/script.js",
+            "size": 24138,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/styles.css",
+            "size": 7215,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/timer_help.png",
+            "size": 65891,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/unused.js",
+            "size": 3875,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/warning.png",
+            "size": 26620,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/warning_help.png",
+            "size": 103789,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/PFE_MSFS-main/zoom_help.png",
+            "size": 98943,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/CustomPanel.css",
+            "size": 1538,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/CustomPanel.html",
+            "size": 1535,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/CustomPanel.js",
+            "size": 5718,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/PFE_MSFS-main/flag_marker.png",
+            "size": 7425,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/PFE_MSFS-main/index.html",
+            "size": 1121,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/PFE_MSFS-main/script.js",
+            "size": 14199,
+            "date": 132453435271410222
+        },
+        {
+            "path": "html_ui/tmp/PFE_MSFS-main/styles.css",
+            "size": 1208,
+            "date": 132453435271410222
+        },
+        {
+            "path": "InGamePanels/jin-tsp-geoguessr.spb",
+            "size": 637,
+            "date": 132453435271410222
+        },
+        {
+            "path": "modules/Test.wasm",
+            "size": 1996010,
+            "date": 132453435271410222
+        }
+    ]
+}

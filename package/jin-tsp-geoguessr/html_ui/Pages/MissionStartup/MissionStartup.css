@@ -1,0 +1,99 @@
+/** This mixin makes a single line element fit exactly on the Roboto font for easier integration. */
+/**
+ * Forces z-index above other siblings during a focused parent.
+*/
+html {
+  --defaultMargin: calc(var(--screenHeight) * (48px / 2160) );
+  --infosWidth: calc(var(--screenHeight) * (1070px / 2160) );
+}
+
+body {
+  color: white;
+  min-height: 100%;
+  max-height: 100%;
+  padding: 0;
+}
+
+.invisible {
+  opacity: 0 !important;
+  transition: opacity 1s ease-in-out;
+}
+
+#StartupContainer {
+  width: 100vw;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin: 0 auto;
+  height: 100vh;
+}
+#StartupContainer.VRMode {
+  transform: scale(1.75);
+  width: 29vw;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin: 0 auto;
+  height: 58vh;
+}
+
+#StartupInfo {
+  position: absolute;
+  left: var(--defaultMargin);
+  bottom: var(--inputBarHeight);
+}
+#StartupInfo .StartupInfosPanel {
+  background-color: var(--backgroundColorContrastedPanel);
+  padding: var(--quartMargin);
+}
+#StartupInfo .StartupInfosPanel panel-info-line {
+  --bgc: var(--backgroundColorPanel);
+}
+#StartupInfo .StartupInfosPanel panel-info-line.heading {
+  margin-bottom: var(--quartMargin);
+}
+
+#AirportInfos {
+  position: absolute;
+  width: auto;
+  min-width: var(--infosWidth);
+  max-width: calc(100vh - 50% - calc(var(--defaultMargin) * 2));
+  bottom: var(--defaultMargin);
+  transition: opacity 1s ease-in-out;
+}
+
+#PlaneInfos {
+  position: absolute;
+  width: auto;
+  min-width: var(--infosWidth);
+  max-width: calc(100vh - 50% - calc(var(--defaultMargin) * 2));
+  bottom: var(--defaultMargin);
+  transition: opacity 1s;
+}
+
+.LargeInfo {
+  font-size: var(--fontSizeDefault);
+  font-weight: bold;
+}
+
+.NormalInfo {
+  font-size: var(--fontSizeDefault);
+}
+
+.SmallInfo {
+  font-size: var(--fontSizeParagraph);
+}
+
+#FlyButton {
+  position: absolute;
+  right: var(--defaultMargin);
+  bottom: calc(var(--inputBarHeight) + var(--defaultMargin));
+}
+#FlyButton.VRMode {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+}
+
+/*# sourceMappingURL=MissionStartup.css.map */
