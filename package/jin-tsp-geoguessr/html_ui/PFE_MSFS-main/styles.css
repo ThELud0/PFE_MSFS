@@ -120,22 +120,20 @@
 /* Animation for the last 5 seconds */
 @keyframes growAndShrink {
   0% {
-    transform: scale(1);
+    transform: scale(1) translateX(-50%);
   }
   50% {
-    transform: scale(1);
+    transform: scale(1) translateX(-50%);
   }
   60% {
-    transform: scale(1.5);
+    transform: scale(1.5) translateX(-50%);
   }
   100% {
-    transform: scale(1); /* Shrink back */
+    transform: scale(1) translateX(-50%); /* Shrink back */
   }
 }
 
 .timer-warning {
-  top: 20%;
-  left: 45.5%;
   animation: growAndShrink 1s infinite; /* Repeat animation every second */
 }
 
