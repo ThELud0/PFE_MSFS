@@ -283,6 +283,14 @@ document.getElementById("btn").addEventListener("click", function () {
   }
 });
 
+document.getElementById("show-answer-btn").addEventListener("click", function () {
+  if (marker != null) {
+    resultWithMarkerChoice();
+  } 
+  else resultWithoutMarkerChoice();
+  hideAnswerRevealButton();
+});
+
 function showAnswer() {
   displayCoordinates();
 
@@ -554,6 +562,7 @@ function ShowStartMenu() {
 
   popupContainer.appendChild(popupBox);
   hideConfirmButton();
+  hideAnswerRevealButton();
 
   /*
   let checkbox = document.getElementById("coding");
@@ -612,10 +621,12 @@ function startTimer(duration) {
       document.getElementById("last-countdown").classList.add("timer-warning");
 
     if (sec < 0) {
+      document.getElementById("last-countdown").classList.remove("timer-warning");
       document.getElementById("last-countdown").innerHTML = "Timeout !";
       clearInterval(timer);
-      if (marker != null) resultWithMarkerChoice();
-      else resultWithoutMarkerChoice();
+      showAnswerRevealButton();
+      hideConfirmButton();
+      mapInteractable = false;
     }
   }, 1000);
 }
@@ -797,8 +808,17 @@ function hideConfirmButton() {
 }
 
 function showConfirmButton() {
+  hideAnswerRevealButton();
   ConfirmHidden = false;
   if (!UIHidden)
     document.getElementById("map-help-text").style.visibility = "visible";
   document.querySelector(".form").style.display = "block";
+}
+
+function showAnswerRevealButton() {
+  document.getElementById("show-answer-btn").style.display = "block";
+}
+
+function hideAnswerRevealButton() {
+  document.getElementById("show-answer-btn").style.display = "none";
 }
