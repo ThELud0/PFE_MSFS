@@ -110,7 +110,7 @@
   left: 50%;
   z-index: 29999;
   pointer-events: none;
-  font-size: 4vw;
+  font-size: 5vw;
   color:red;
   transform: translateX(-50%);
 
@@ -134,6 +134,8 @@
 }
 
 .timer-warning {
+  top: 20%;
+  left: 45.5%;
   animation: growAndShrink 1s infinite; /* Repeat animation every second */
 }
 

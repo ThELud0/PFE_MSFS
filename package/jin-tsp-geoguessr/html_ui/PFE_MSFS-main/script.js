@@ -452,7 +452,7 @@ function resultWithoutMarkerChoice() {
   document.getElementById("last-countdown").style.visibility = "hidden";
   hideConfirmButton();
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">Time out!</br>You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
+  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
