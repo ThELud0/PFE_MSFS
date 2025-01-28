@@ -374,7 +374,7 @@ function resultWithMarkerChoice() {
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "End Results";
+    currentRound < maxRound ? "Next Location" : "End Results";
 
   document.getElementById("btn").disabled = true;
 
@@ -425,7 +425,7 @@ function resultWithoutMarkerChoice() {
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "End Results";
+    currentRound < maxRound ? "Next Location" : "End Results";
 
   //document.getElementById("btn").style.pointerEvents = "none";
   document.getElementById("btn").disabled = true;
