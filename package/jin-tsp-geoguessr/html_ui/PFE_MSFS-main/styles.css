@@ -86,6 +86,39 @@
   height:7vw;
 }
 
+.last-countdown {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  z-index: 29999;
+  pointer-events: none;
+  font-size: 4vw;
+  color:red;
+  transform: translateX(-50%);
+  padding-inline:4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Animation for the last 5 seconds */
+@keyframes growAndShrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1); /* Shrink back */
+  }
+}
+
+.timer-warning {
+  animation: growAndShrink 1s infinite; /* Repeat animation every second */
+}
+
 .form #latitude {
   pointer-events: none;
   position: relative;
