@@ -465,6 +465,9 @@ function resultWithoutMarkerChoice() {
   popupBox.appendChild(closeButton);
   popupContainer.appendChild(popupBox);
 
+  displayCoordinates();
+  map.setView(guessMarker.getLatLng(),5);
+
   closeButton.addEventListener("click", function () {
     wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
     popupContainer.removeChild(popupBox);
