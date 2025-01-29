@@ -667,17 +667,20 @@ function WASM_round_x(args) {
     longitude: data.target_longitude,
   };
 
-  mapInteractable = true;
+  
   if (data.guessed) {
     markerLatitude = data.guessed_latitude;
     markerLongitude = data.guessed_longitude;
     resultWithMarkerChoice();
+    hideAnswerRevealButton();
   } else if (data.remaining_time > 0) {
+    mapInteractable = true;
     displayRound();
     startTimer(data.remaining_time);
     showConfirmButton();
   } else {
-    resultWithoutMarkerChoice();
+    hideConfirmButton();
+    showAnswerRevealButton();
   }
 }
 
@@ -802,12 +805,14 @@ function addAttribution() {
 }
 
 function hideConfirmButton() {
+  mapInteractable = false;
   ConfirmHidden = true;
   document.getElementById("map-help-text").style.visibility = "hidden";
   document.querySelector(".form").style.display = "none";
 }
 
 function showConfirmButton() {
+  mapInteractable = true;
   hideAnswerRevealButton();
   ConfirmHidden = false;
   if (!UIHidden)
@@ -816,6 +821,7 @@ function showConfirmButton() {
 }
 
 function showAnswerRevealButton() {
+  mapInteractable = false;
   document.getElementById("show-answer-btn").style.display = "block";
 }
 
