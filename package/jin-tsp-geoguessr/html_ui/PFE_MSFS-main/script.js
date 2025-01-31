@@ -126,12 +126,15 @@ function setIsInVR(state) {
 // Creating a map object
 var map = new L.map("map", mapOptions);
 
-// Creating a Layer object
 var layer = new L.TileLayer(
-  "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+);
+var layer2 = new L.TileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 );
 
 // Adding layer to the map
+map.addLayer(layer2);
 map.addLayer(layer);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -291,13 +294,14 @@ document.getElementById("btn").addEventListener("click", function () {
   }
 });
 
-document.getElementById("show-answer-btn").addEventListener("click", function () {
-  if (marker != null) {
-    resultWithMarkerChoice();
-  } 
-  else resultWithoutMarkerChoice();
-  hideAnswerRevealButton();
-});
+document
+  .getElementById("show-answer-btn")
+  .addEventListener("click", function () {
+    if (marker != null) {
+      resultWithMarkerChoice();
+    } else resultWithoutMarkerChoice();
+    hideAnswerRevealButton();
+  });
 
 function showAnswer() {
   displayCoordinates();
@@ -360,9 +364,9 @@ function resultWithMarkerChoice() {
   //var popupMapDiv = document.createElement("div");
   var closeButton = document.createElement("button");
   document.getElementById("last-countdown").style.visibility = "hidden";
-
-  //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
+  hideAnswerRevealButton();
   hideConfirmButton();
+  //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
   markerLongitude =
     markerLongitude < 0
       ? ((markerLongitude - 180) % 360) + 180
@@ -458,6 +462,7 @@ function resultWithoutMarkerChoice() {
 
   var closeButton = document.createElement("button");
   document.getElementById("last-countdown").style.visibility = "hidden";
+  hideAnswerRevealButton();
   hideConfirmButton();
   popupBox.className = "popup-box";
   popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
@@ -474,7 +479,7 @@ function resultWithoutMarkerChoice() {
   popupContainer.appendChild(popupBox);
 
   displayCoordinates();
-  map.setView(guessMarker.getLatLng(),5);
+  map.setView(guessMarker.getLatLng(), 5);
 
   closeButton.addEventListener("click", function () {
     wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
@@ -496,7 +501,6 @@ function resultWithoutMarkerChoice() {
 
 //Pop-up on game end
 function ShowEndResults() {
-
   hideAnswerRevealButton();
   hideConfirmButton();
   var popupContainer = document.getElementById("popup-container");
@@ -635,7 +639,9 @@ function startTimer(duration) {
       document.getElementById("last-countdown").classList.add("timer-warning");
 
     if (sec < 0) {
-      document.getElementById("last-countdown").classList.remove("timer-warning");
+      document
+        .getElementById("last-countdown")
+        .classList.remove("timer-warning");
       document.getElementById("last-countdown").innerHTML = "Timeout !";
       clearInterval(timer);
       showAnswerRevealButton();
@@ -680,7 +686,6 @@ function WASM_round_x(args) {
     latitude: data.target_latitude,
     longitude: data.target_longitude,
   };
-  
   if (data.guessed) {
     markerLatitude = data.guessed_latitude;
     markerLongitude = data.guessed_longitude;
@@ -808,13 +813,30 @@ function hideUIElements() {
 function addAttribution() {
   const parentDiv = document.querySelector(".leaflet-control-attribution");
   //parentDiv.textContent = "ahh";
+
   const separation = document.createElement("a");
   separation.textContent = " | ";
   const newAnchor = document.createElement("a");
   newAnchor.textContent = "OpenStreetMap";
   newAnchor.href = "https://www.openstreetmap.org/copyright";
+
+  const separation2 = document.createElement("a");
+  separation2.textContent = " | ";
+  const newAnchor2 = document.createElement("a");
+  newAnchor2.textContent = "Carto";
+  newAnchor2.href = "https://carto.com/attributions";
+
+  const separation3 = document.createElement("a");
+  separation3.textContent = " | ";
+  const newAnchor3 = document.createElement("a");
+  newAnchor3.textContent = "Tiles @ Esri";
+
   parentDiv.appendChild(separation);
   parentDiv.appendChild(newAnchor);
+  parentDiv.appendChild(separation2);
+  parentDiv.appendChild(newAnchor2);
+  parentDiv.appendChild(separation3);
+  parentDiv.appendChild(newAnchor3);
 }
 
 function hideConfirmButton() {
