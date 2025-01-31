@@ -288,6 +288,12 @@ document.getElementById("btn").addEventListener("click", function () {
       "[]"
     );
 
+    let score = getScore(distance);
+    totalScore += score;
+    let numbersOfDecimals = distance > 10 ? 0 : 3;
+    distance = distance.toFixed(numbersOfDecimals);
+    totalDistance += Number(distance);
+    
     resultWithMarkerChoice();
     hideConfirmButton();
     clearInterval(timer);
@@ -379,14 +385,6 @@ function resultWithMarkerChoice() {
     coordinates.latitude,
     coordinates.longitude
   );
-
-  let score = getScore(distance);
-  totalScore += score;
-
-  let numbersOfDecimals = distance > 10 ? 0 : 3;
-  distance = distance.toFixed(numbersOfDecimals);
-
-  totalDistance += Number(distance);
 
   let notAccurate = "That's... not very accurate, is it ?";
   let goodEnough = "Keep going ! Improvement is only a few rounds away !";
