@@ -1,6 +1,6 @@
 # Project Microsoft Flight Simulator Geo-Guessing 
 
-The following work was made by Loîc Chevalier, Yohan François and Ludovic Hu for a school project.
+The following work was made by Loïc Chevalier, Yohan François and Ludovic Hu for a school project.
 
 In this repository, you will find a Geo-Guessr add-on for Microsoft Flight Simulator by Asobo Studio. 
 This add-on serves as a proof of concept for a working Geo-guessing mode in MSFS. It is compatible with both desktop and Virtual Reality gameplay using mouse and keyboard or VR controllers.
