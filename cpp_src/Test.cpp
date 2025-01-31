@@ -18,7 +18,8 @@
 #define FLIGHT_SAVE_LOCATION ( WORK_DIRECTORY FLIGHT_SAVE_NAME)
 #define FLIGHT_LOAD_LOCATION ( WORK_DIRECTORY FLIGHT_LOAD_NAME)
 
-#define GUESS_TIME (3 * 60 * 6)
+#define GUESS_TIME (5 * 60 * 6)
+
 
 float const known_positions[] = {
     2.294126f, 48.857308f,                    // Eiffel tower
@@ -152,6 +153,10 @@ public:
         if (SimConnect_SubscribeToSystemEvent(sim, static_cast<DWORD>(UserEvent::PAUSE_STATE), "Pause") != S_OK) {
             return;
         }
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE PITCH DEGREES", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE BANK DEGREES", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE HEADING DEGREES TRUE", "radians");
+
         SimConnect_CallDispatch(sim, &dispatch, nullptr);
     }
 
@@ -210,6 +215,11 @@ public:
         if (state == State::ACTIVE_BRIEFING_PAUSE) {
             fsCommBusCall("PFE_JIN_end_briefing", "[]", 3, FsCommBusBroadcast_JS);
         }
+        // sometimes CustomPanel.html is loaded before MissionStartup.html
+        JS_get_state();
+        // sometimes the planes appears upside down
+        constexpr double zero[] = { 0.0, 0.0, 0.0 };
+        SimConnect_SetDataOnSimObject(sim, static_cast<DWORD>(DataDefs::ANGLES), SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG_DEFAULT, 1, sizeof(zero), static_cast<void*>(const_cast<double*>(zero)));
     }
 
     void JS_start_gg() {
@@ -256,7 +266,6 @@ public:
 
         distance = doc["distance"].GetFloat();
         score = doc["score"].GetUint64();
-
     }
 
     void JS_end_round() {
@@ -280,6 +289,10 @@ private:
         ++round;
         countdown = GUESS_TIME;
         guessed = false;
+        distance = 0;
+        score = 0;
+        marker[0] = 0.0f;
+        marker[1] = 0.0f;
 
         std::fstream saved{FLIGHT_SAVE_LOCATION, std::ios::in};
         std::fstream to_load{FLIGHT_LOAD_LOCATION, std::ios::out | std::ios::trunc};
@@ -323,12 +336,19 @@ private:
         ss << "[PFE] Loading file " << data->szFileName << std::endl;
         std::cerr << ss.str();
         bool is_custom_flight = FLightLoader::compare_file_names(data->szFileName, name_size, CUSTOM_FLIGHT_NAME, sizeof(CUSTOM_FLIGHT_NAME));
+        bool is_tp_flight = FLightLoader::compare_file_names(data->szFileName, name_size, TMP_FLIGHT_NAME, sizeof(TMP_FLIGHT_NAME));
+        
         if (state == State::INACTIVE) {
             if (is_custom_flight) {
                 state = State::CUSTOM_FLIGHT_LAUNCHED;
             }
         }
-        else if (!is_custom_flight && !FLightLoader::compare_file_names(data->szFileName, name_size, TMP_FLIGHT_NAME, sizeof(TMP_FLIGHT_NAME))) {
+        else if (state == State::TP_LAUNCHED) {
+            if (is_tp_flight) {
+                state = State::TP_LOADED_FILE;
+            }
+        }
+        else if (!is_custom_flight && !is_tp_flight) {
             SimConnect_UnsubscribeFromSystemEvent(sim, static_cast<DWORD>(UserEvent::TIME));
             state = State::INACTIVE;
         }
@@ -370,7 +390,7 @@ private:
             SimConnect_FlightSave(sim, FLIGHT_SAVE_LOCATION, "User-loaded flight", "Geo-guessing utility flight", 0);
             state = State::CUSTOM_FLIGHT;
             break;
-        case State::TP_LAUNCHED:
+        case State::TP_LOADED_FILE:
             state = State::ACTIVE_BRIEFING_NO_PAUSE;
             break;
         case State::ACTIVE_BRIEFING_NO_PAUSE:
@@ -408,6 +428,7 @@ private:
         CUSTOM_FLIGHT_BRIEFING_PAUSE,
         CUSTOM_FLIGHT,
         TP_LAUNCHED,
+        TP_LOADED_FILE, 
         ACTIVE_BRIEFING_NO_PAUSE,
         ACTIVE_BRIEFING_PAUSE,
         ROUND_X,
@@ -420,6 +441,11 @@ private:
         PAUSE_STATE,
         TIME
     };
+
+    enum class DataDefs {
+        ANGLES
+    };
+
     friend void CALLBACK dispatch(SIMCONNECT_RECV* data, DWORD size, void* context);
 };
 
@@ -430,8 +456,6 @@ void CALLBACK dispatch(SIMCONNECT_RECV* data, DWORD size, void* context) {
 void JS_briefing(char const*, unsigned int, void*) {
     std::cerr << "[PFE] JS requested briefing skip\n";
     GeoGuessing::get().JS_briefing();
-    // sometimes CustomPanel.html is loaded before MissionStartup.html
-    GeoGuessing::get().JS_get_state();
 }
 
 void JS_requested_state(char const*, unsigned int, void*) {

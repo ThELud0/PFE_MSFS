@@ -399,8 +399,8 @@ function resultWithMarkerChoice() {
     coordinates.latitude,
     coordinates.longitude
   );
-  distance = distance.toFixed(2)
   let score = getScore(distance);
+  distance = distance.toFixed(2);
 
   let notAccurate = "That's... not very accurate, is it ?";
   let goodEnough = "Keep going ! Improvement is only a few rounds away !";
