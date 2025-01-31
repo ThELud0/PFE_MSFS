@@ -126,12 +126,16 @@ function setIsInVR(state) {
 // Creating a map object
 var map = new L.map("map", mapOptions);
 
-// Creating a Layer object
 var layer = new L.TileLayer(
-  "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+);
+var layer2 = new L.TileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 );
 
+
 // Adding layer to the map
+map.addLayer(layer2);
 map.addLayer(layer);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -801,13 +805,32 @@ function hideUIElements() {
 function addAttribution() {
   const parentDiv = document.querySelector(".leaflet-control-attribution");
   //parentDiv.textContent = "ahh";
+
   const separation = document.createElement("a");
   separation.textContent = " | ";
   const newAnchor = document.createElement("a");
   newAnchor.textContent = "OpenStreetMap";
   newAnchor.href = "https://www.openstreetmap.org/copyright";
+
+  const separation2 = document.createElement("a");
+  separation2.textContent = " | ";
+  const newAnchor2 = document.createElement("a");
+  newAnchor2.textContent = "Carto";
+  newAnchor2.href = "https://carto.com/attributions";
+
+  const separation3 = document.createElement("a");
+  separation3.textContent = " | ";
+  const newAnchor3 = document.createElement("a");
+  newAnchor3.textContent = "Tiles @ Esri";
+
+
+
   parentDiv.appendChild(separation);
   parentDiv.appendChild(newAnchor);
+  parentDiv.appendChild(separation2);
+  parentDiv.appendChild(newAnchor2);
+  parentDiv.appendChild(separation3);
+  parentDiv.appendChild(newAnchor3);
 }
 
 function hideConfirmButton() {
