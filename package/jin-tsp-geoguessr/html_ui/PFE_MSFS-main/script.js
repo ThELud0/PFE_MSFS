@@ -133,7 +133,6 @@ var layer2 = new L.TileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 );
 
-
 // Adding layer to the map
 map.addLayer(layer2);
 map.addLayer(layer);
@@ -287,13 +286,14 @@ document.getElementById("btn").addEventListener("click", function () {
   }
 });
 
-document.getElementById("show-answer-btn").addEventListener("click", function () {
-  if (marker != null) {
-    resultWithMarkerChoice();
-  } 
-  else resultWithoutMarkerChoice();
-  hideAnswerRevealButton();
-});
+document
+  .getElementById("show-answer-btn")
+  .addEventListener("click", function () {
+    if (marker != null) {
+      resultWithMarkerChoice();
+    } else resultWithoutMarkerChoice();
+    hideAnswerRevealButton();
+  });
 
 function showAnswer() {
   displayCoordinates();
@@ -356,9 +356,9 @@ function resultWithMarkerChoice() {
   //var popupMapDiv = document.createElement("div");
   var closeButton = document.createElement("button");
   document.getElementById("last-countdown").style.visibility = "hidden";
-
-  //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
+  hideAnswerRevealButton();
   hideConfirmButton();
+  //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
   markerLongitude =
     markerLongitude < 0
       ? ((markerLongitude - 180) % 360) + 180
@@ -454,6 +454,7 @@ function resultWithoutMarkerChoice() {
 
   var closeButton = document.createElement("button");
   document.getElementById("last-countdown").style.visibility = "hidden";
+  hideAnswerRevealButton();
   hideConfirmButton();
   popupBox.className = "popup-box";
   popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
@@ -470,7 +471,7 @@ function resultWithoutMarkerChoice() {
   popupContainer.appendChild(popupBox);
 
   displayCoordinates();
-  map.setView(guessMarker.getLatLng(),5);
+  map.setView(guessMarker.getLatLng(), 5);
 
   closeButton.addEventListener("click", function () {
     wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
@@ -492,7 +493,6 @@ function resultWithoutMarkerChoice() {
 
 //Pop-up on game end
 function ShowEndResults() {
-
   hideAnswerRevealButton();
   hideConfirmButton();
   var popupContainer = document.getElementById("popup-container");
@@ -631,7 +631,9 @@ function startTimer(duration) {
       document.getElementById("last-countdown").classList.add("timer-warning");
 
     if (sec < 0) {
-      document.getElementById("last-countdown").classList.remove("timer-warning");
+      document
+        .getElementById("last-countdown")
+        .classList.remove("timer-warning");
       document.getElementById("last-countdown").innerHTML = "Timeout !";
       clearInterval(timer);
       showAnswerRevealButton();
@@ -677,7 +679,6 @@ function WASM_round_x(args) {
     longitude: data.target_longitude,
   };
 
-  
   if (data.guessed) {
     markerLatitude = data.guessed_latitude;
     markerLongitude = data.guessed_longitude;
@@ -822,8 +823,6 @@ function addAttribution() {
   separation3.textContent = " | ";
   const newAnchor3 = document.createElement("a");
   newAnchor3.textContent = "Tiles @ Esri";
-
-
 
   parentDiv.appendChild(separation);
   parentDiv.appendChild(newAnchor);
