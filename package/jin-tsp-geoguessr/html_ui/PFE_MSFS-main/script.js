@@ -292,7 +292,7 @@ document.getElementById("btn").addEventListener("click", function () {
       coordinates.latitude,
       coordinates.longitude
     );
-    
+
     let score = getScore(distance);
     totalScore += score;
     let numbersOfDecimals = distance > 10 ? 0 : 3;
@@ -390,6 +390,7 @@ function resultWithMarkerChoice() {
     coordinates.latitude,
     coordinates.longitude
   );
+  let score = getScore(distance);
 
   let notAccurate = "That's... not very accurate, is it ?";
   let goodEnough = "Keep going ! Improvement is only a few rounds away !";
