@@ -191,7 +191,6 @@ map.on("mousedown", (event) => {
 
     clickTimer = setInterval(function () {
       clickCountdown += 0.05;
-      //document.getElementById("ctd").value = 1;
       if (clickCountdown >= 0.15) clearInterval(clickTimer);
     }, 50);
   }
@@ -296,6 +295,18 @@ document.getElementById("btn").addEventListener("click", function () {
       "PFE_JIN_guess",
       "[]"
     );
+    let distance = getDistanceFromLatLonInKm(
+      markerLatitude,
+      markerLongitude,
+      coordinates.latitude,
+      coordinates.longitude
+    );
+
+    let score = getScore(distance);
+    totalScore += score;
+    let numbersOfDecimals = distance > 10 ? 0 : 3;
+    distance = distance.toFixed(numbersOfDecimals);
+    totalDistance += Number(distance);
 
     resultWithMarkerChoice();
     hideConfirmButton();
@@ -324,8 +335,9 @@ function showAnswer() {
       color: "red",
     }
   );
-
-  map.removeLayer(marker);
+  if (marker != null) {
+    map.removeLayer(marker);
+  }
   marker = L.marker([markerLatitude, markerLongitude]).addTo(map);
   map.fitBounds(distanceLine.getBounds(), { animate: false });
   distanceLine.addTo(map);
@@ -387,14 +399,7 @@ function resultWithMarkerChoice() {
     coordinates.latitude,
     coordinates.longitude
   );
-
   let score = getScore(distance);
-  totalScore += score;
-
-  let numbersOfDecimals = distance > 10 ? 0 : 3;
-  distance = distance.toFixed(numbersOfDecimals);
-
-  totalDistance += Number(distance);
 
   let notAccurate = "That's... not very accurate, is it ?";
   let goodEnough = "Keep going ! Improvement is only a few rounds away !";
@@ -444,8 +449,8 @@ function resultWithMarkerChoice() {
   showAnswer();
 
   closeButton.addEventListener("click", function () {
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
     popupContainer.removeChild(popupBox);
+    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
 
     // clearAnswer();
     // if (currentRound < maxRound) {
@@ -491,8 +496,8 @@ function resultWithoutMarkerChoice() {
   map.setView(guessMarker.getLatLng(), 5);
 
   closeButton.addEventListener("click", function () {
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
     popupContainer.removeChild(popupBox);
+    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
 
     // if (currentRound < maxRound) {
     //   currentRound++;
