@@ -488,6 +488,9 @@ function resultWithoutMarkerChoice() {
 
 //Pop-up on game end
 function ShowEndResults() {
+
+  hideAnswerRevealButton();
+  hideConfirmButton();
   var popupContainer = document.getElementById("popup-container");
   var popupBox = document.createElement("div");
 
