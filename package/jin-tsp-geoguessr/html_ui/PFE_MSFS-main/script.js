@@ -1,5 +1,12 @@
 const browserOnly = false; //FlightSim methods will break the code when they fail; if trying out code in browser, set this to true to not break other code
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------ LOCATIONS DEFINITIONS (OUTDATED) ---------------------------------//
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//The coordinates of the points of interests that the addon can teleport you to. These shouldn't be used anymore as the locations and the teleportation
+//system has been moved to the C++ and WASM side of the project.
+
 const eiffelTower = { latitude: 48.857308, longitude: 2.294126 };
 const libertyStatue = { latitude: 40.6911, longitude: -74.047628 };
 const bigBen = { latitude: 51.500388, longitude: -0.124305 };
@@ -57,6 +64,8 @@ const listOfLandmarks = [
   dubai,
   sydneyOperaHouse,
 ];
+
+///////////////////////////////////////// END OF DEFINITION /////////////////////////////////////////////////////////////////
 
 let wasmListener = parent.wasmListener();
 
@@ -182,7 +191,7 @@ map.on("mousedown", (event) => {
 
     clickTimer = setInterval(function () {
       clickCountdown += 0.05;
-      document.getElementById("ctd").value = 1;
+      //document.getElementById("ctd").value = 1;
       if (clickCountdown >= 0.15) clearInterval(clickTimer);
     }, 50);
   }
