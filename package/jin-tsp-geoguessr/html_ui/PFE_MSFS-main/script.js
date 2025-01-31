@@ -149,6 +149,24 @@ function putDownMarker(event) {
     }
     markerLatitude = event.latlng.lat;
     markerLongitude = event.latlng.lng;
+    
+    var dist = getDistanceFromLatLonInKm(
+      coordinates.latitude,
+      coordinates.longitude,
+      markerLatitude,
+      markerLongitude
+    );
+    wasmListener.call(
+      "COMM_BUS_WASM_CALLBACK",
+      "PFE_JIN_place_marker",
+      JSON.stringify({
+        latitude: markerLatitude,
+        longitude: markerLongitude,
+        distance: dist,
+        score: getScore(dist),
+      })
+    )
+
     marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
     console.log("clicked map");
     // updateDebugCoordinatesDisplay(event.latlng.lat, event.latlng.lng);
@@ -260,21 +278,11 @@ function resetMarker() {
 // Confirm button click event
 document.getElementById("btn").addEventListener("click", function () {
   if (marker != null) {
-    var dist = getDistanceFromLatLonInKm(
-      coordinates.latitude,
-      coordinates.longitude,
-      markerLatitude,
-      markerLongitude
-    );
+    
     wasmListener.call(
       "COMM_BUS_WASM_CALLBACK",
       "PFE_JIN_guess",
-      JSON.stringify({
-        latitude: markerLatitude,
-        longitude: markerLongitude,
-        distance: dist,
-        score: getScore(dist),
-      })
+      "[]"
     );
 
     resultWithMarkerChoice();
@@ -672,7 +680,6 @@ function WASM_round_x(args) {
     latitude: data.target_latitude,
     longitude: data.target_longitude,
   };
-
   
   if (data.guessed) {
     markerLatitude = data.guessed_latitude;
