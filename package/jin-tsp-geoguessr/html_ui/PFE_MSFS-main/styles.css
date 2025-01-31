@@ -52,6 +52,24 @@
   background-color: rgb(240, 240, 240);
 }
 
+#show-answer-btn {
+  position: absolute;
+  left: 50%;
+  bottom: calc(6% + 15px + 5.5vw);
+  z-index: 9999;
+  transform: translate(-50%, 0%);
+  width: 16vw;
+  height: 5vw;
+  font-size: 2vw;
+  border-radius: 6px;
+  border:solid black 2px;
+  background-color: white;
+}
+
+#show-answer-btn:hover {
+  background-color: rgb(240, 240, 240);
+}
+
 .timer {
   position: absolute;
   top: 0;
@@ -84,6 +102,39 @@
 #timer-help-text .timer-help-img {
   width: 31.6vw;
   height:7vw;
+}
+
+.last-countdown {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  z-index: 29999;
+  pointer-events: none;
+  font-size: 5vw;
+  color:red;
+  transform: translateX(-50%);
+
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Animation for the last 5 seconds */
+@keyframes growAndShrink {
+  0% {
+    transform: scale(1) translateX(-50%);
+  }
+  50% {
+    transform: scale(1) translateX(-50%);
+  }
+  60% {
+    transform: scale(1.5) translateX(-50%);
+  }
+  100% {
+    transform: scale(1) translateX(-50%); /* Shrink back */
+  }
+}
+
+.timer-warning {
+  animation: growAndShrink 1s infinite; /* Repeat animation every second */
 }
 
 .form #latitude {

@@ -1,24 +1,43 @@
 const browserOnly = false; //FlightSim methods will break the code when they fail; if trying out code in browser, set this to true to not break other code
 
-
-
 const eiffelTower = { latitude: 48.857308, longitude: 2.294126 };
 const libertyStatue = { latitude: 40.6911, longitude: -74.047628 };
 const bigBen = { latitude: 51.500388, longitude: -0.124305 };
 const pyramides = { latitude: 29.976022, longitude: 31.132387 };
 const telecomSudparis = { latitude: 48.623716, longitude: 2.443632 };
-const greatWallChina = {latitude:40.43203833604343, longitude:116.5704392693513};
-const greatCanyon = {latitude: 36.29895670157174,longitude: -112.3462442354791}; 
-const niagaraFalls = {latitude: 43.08760331208694, longitude: -79.06552582283697};
-const colosseum = {latitude: 41.89206671095406, longitude: 12.491039010441456};
-const tajMahal = {latitude: 27.1722021135075,longitude:  78.04533863272798};
-const acropolis = {latitude: 37.97176908768301, longitude: 23.72404331140337};
-const basilica = {latitude: 41.40260777338642, longitude: 2.174194844167786};
-const goldenGateBridge = {latitude: 37.80457130090765, longitude: -122.44579473794794};
-const banff = {latitude: 51.17801485320009, longitude: -115.5512131704649};
-const stoneHenge = {latitude: 51.18158663107134, longitude: -1.8301657694558358};
-const dubai = {latitude: 25.093509207449106, longitude: 55.157423667532534};
-const sydneyOperaHouse = {latitude: -33.85755346008194, longitude: 151.21509537241187};
+const greatWallChina = {
+  latitude: 40.43203833604343,
+  longitude: 116.5704392693513,
+};
+const greatCanyon = {
+  latitude: 36.29895670157174,
+  longitude: -112.3462442354791,
+};
+const niagaraFalls = {
+  latitude: 43.08760331208694,
+  longitude: -79.06552582283697,
+};
+const colosseum = {
+  latitude: 41.89206671095406,
+  longitude: 12.491039010441456,
+};
+const tajMahal = { latitude: 27.1722021135075, longitude: 78.04533863272798 };
+const acropolis = { latitude: 37.97176908768301, longitude: 23.72404331140337 };
+const basilica = { latitude: 41.40260777338642, longitude: 2.174194844167786 };
+const goldenGateBridge = {
+  latitude: 37.80457130090765,
+  longitude: -122.44579473794794,
+};
+const banff = { latitude: 51.17801485320009, longitude: -115.5512131704649 };
+const stoneHenge = {
+  latitude: 51.18158663107134,
+  longitude: -1.8301657694558358,
+};
+const dubai = { latitude: 25.093509207449106, longitude: 55.157423667532534 };
+const sydneyOperaHouse = {
+  latitude: -33.85755346008194,
+  longitude: 151.21509537241187,
+};
 
 const listOfLandmarks = [
   eiffelTower,
@@ -36,7 +55,7 @@ const listOfLandmarks = [
   banff,
   stoneHenge,
   dubai,
-  sydneyOperaHouse
+  sydneyOperaHouse,
 ];
 
 let wasmListener = parent.wasmListener();
@@ -45,7 +64,7 @@ var chosenLandmarks;
 
 const maxScore = 5000;
 const maxRound = 5;
-const timerDuration = 180; //in seconds
+const timerDuration = 300; //in seconds
 
 var markerLatitude;
 var markerLongitude;
@@ -119,7 +138,6 @@ map.addLayer(layer);
 //------------------------------ DISPLAY METHODS -----------------------------//
 ////////////////////////////////////////////////////////////////////////////////
 
-
 function putDownMarker(event) {
   if (mapInteractable) {
     if (marker !== null) {
@@ -136,7 +154,6 @@ function putDownMarker(event) {
     // updateDebugCoordinatesDisplay(event.latlng.lat, event.latlng.lng);
   }
 }
-
 
 map.on("mousedown", (event) => {
   if (isInVr) {
@@ -185,25 +202,21 @@ function displayCoordinates() {
 //------------------------ RANDOM COORDINATES GENERATION METHODS --------------------------------//
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
 function chooseFromLandmarks(array, count) {
   const copy = [...array]; // Make a copy to avoid modifying the original array
   const selected = [];
-  
+
   while (selected.length < count && copy.length > 0) {
     const randomIndex = Math.floor(Math.random() * copy.length);
     selected.push(copy.splice(randomIndex, 1)[0]); // Remove and add to the selected array
   }
-  
+
   return selected;
 }
 
 function generateChosenLandCoordinates() {
-
   const chosenContinent = chosenLandmarks[currentRound - 1];
   //const chosenContinent = land[0];
-
 
   const latitude = chosenContinent.latitude;
   const longitude = chosenContinent.longitude;
@@ -247,18 +260,35 @@ function resetMarker() {
 // Confirm button click event
 document.getElementById("btn").addEventListener("click", function () {
   if (marker != null) {
-    var dist = getDistanceFromLatLonInKm(coordinates.latitude, coordinates.longitude, markerLatitude, markerLongitude)
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_guess", JSON.stringify({
-      latitude: markerLatitude,
-      longitude: markerLongitude,
-      distance: dist,
-      score: getScore(dist)
-    }));
+    var dist = getDistanceFromLatLonInKm(
+      coordinates.latitude,
+      coordinates.longitude,
+      markerLatitude,
+      markerLongitude
+    );
+    wasmListener.call(
+      "COMM_BUS_WASM_CALLBACK",
+      "PFE_JIN_guess",
+      JSON.stringify({
+        latitude: markerLatitude,
+        longitude: markerLongitude,
+        distance: dist,
+        score: getScore(dist),
+      })
+    );
 
     resultWithMarkerChoice();
     hideConfirmButton();
     clearInterval(timer);
   }
+});
+
+document.getElementById("show-answer-btn").addEventListener("click", function () {
+  if (marker != null) {
+    resultWithMarkerChoice();
+  } 
+  else resultWithoutMarkerChoice();
+  hideAnswerRevealButton();
 });
 
 function showAnswer() {
@@ -321,6 +351,7 @@ function resultWithMarkerChoice() {
   var popupBox = document.createElement("div");
   //var popupMapDiv = document.createElement("div");
   var closeButton = document.createElement("button");
+  document.getElementById("last-countdown").style.visibility = "hidden";
 
   //you can scroll past antimeridians on the map to the left/right (beyond 180°/-180°) so we have to get the coordinates back in range for the result calculation
   hideConfirmButton();
@@ -374,7 +405,7 @@ function resultWithMarkerChoice() {
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "End Results";
+    currentRound < maxRound ? "Next Location" : "End Results";
 
   document.getElementById("btn").disabled = true;
 
@@ -392,9 +423,9 @@ function resultWithMarkerChoice() {
   showAnswer();
 
   closeButton.addEventListener("click", function () {
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");;
+    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
     popupContainer.removeChild(popupBox);
-    
+
     // clearAnswer();
     // if (currentRound < maxRound) {
     //   currentRound++;
@@ -418,14 +449,15 @@ function resultWithoutMarkerChoice() {
   var popupBox = document.createElement("div");
 
   var closeButton = document.createElement("button");
+  document.getElementById("last-countdown").style.visibility = "hidden";
   hideConfirmButton();
   popupBox.className = "popup-box";
-  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">Time out!</br>You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
+  popupBox.innerHTML = `<h1>Round ${currentRound}/${maxRound}</h1><div class="popup-content">You did not make any guess,</br>no points for you this round!</br><h1>(total: ${totalScore})</h1></div>`;
 
   closeButton.className = "close-btn";
   closeButton.type = "button";
   closeButton.innerHTML =
-    currentRound < maxRound ? "Next Round" : "End Results";
+    currentRound < maxRound ? "Next Location" : "End Results";
 
   //document.getElementById("btn").style.pointerEvents = "none";
   document.getElementById("btn").disabled = true;
@@ -433,10 +465,13 @@ function resultWithoutMarkerChoice() {
   popupBox.appendChild(closeButton);
   popupContainer.appendChild(popupBox);
 
+  displayCoordinates();
+  map.setView(guessMarker.getLatLng(),5);
+
   closeButton.addEventListener("click", function () {
     wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_end_of_round", "[]");
     popupContainer.removeChild(popupBox);
-    
+
     // if (currentRound < maxRound) {
     //   currentRound++;
     //   generateNewTarget();
@@ -464,14 +499,18 @@ function ShowEndResults() {
 
   let numbersOfDecimalsBis = totalDistance > 10 ? 0 : 3;
 
-  let numbersOfDecimalsAverage = (totalDistance / maxRound) > 10 ? 1 : 3;
+  let numbersOfDecimalsAverage = totalDistance / maxRound > 10 ? 1 : 3;
 
   popupBox.innerHTML = `<h1>Game end !</h1><div class="popup-content"></br>Congratulations !</br>You scored a total of <h1>${totalScore} points</h1> and beat <h1>${topBeat}% of players</h1>.</br></br>Average guess time: <h1>${
     totalGuessTime / maxRound
   } seconds</h1><br/>(Total time: ${totalGuessTime} seconds)
-  <br/><br/>Average distance from marker: <h1>${
-    (totalDistance / maxRound).toFixed(numbersOfDecimalsAverage)
-  }km</h1><br/>(Total distance: ${totalDistance.toFixed(numbersOfDecimalsBis)}km)</div>`;
+  <br/><br/>Average distance from marker: <h1>${(
+    totalDistance / maxRound
+  ).toFixed(
+    numbersOfDecimalsAverage
+  )}km</h1><br/>(Total distance: ${totalDistance.toFixed(
+    numbersOfDecimalsBis
+  )}km)</div>`;
   mapInteractable = false;
   closeButton.className = "close-btn";
   closeButton.type = "button";
@@ -485,7 +524,11 @@ function ShowEndResults() {
   hideConfirmButton();
 
   closeButton.addEventListener("click", function () {
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_start_geoguessing", "[]");
+    wasmListener.call(
+      "COMM_BUS_WASM_CALLBACK",
+      "PFE_JIN_start_geoguessing",
+      "[]"
+    );
     // startGame();
     // mapInteractable = true;
     // popupContainer.removeChild(popupBox);
@@ -522,6 +565,7 @@ function ShowStartMenu() {
 
   popupContainer.appendChild(popupBox);
   hideConfirmButton();
+  hideAnswerRevealButton();
 
   /*
   let checkbox = document.getElementById("coding");
@@ -541,7 +585,11 @@ function ShowStartMenu() {
 
   closeButton.addEventListener("click", function () {
     // startGame();
-    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_start_geoguessing", "[]");
+    wasmListener.call(
+      "COMM_BUS_WASM_CALLBACK",
+      "PFE_JIN_start_geoguessing",
+      "[]"
+    );
     mapInteractable = true;
     popupContainer.removeChild(popupBox);
   });
@@ -553,6 +601,8 @@ function ShowStartMenu() {
 
 function startTimer(duration) {
   var sec = duration;
+  document.getElementById("last-countdown").style.visibility = "hidden";
+  document.getElementById("last-countdown").classList.remove("timer-warning");
   timer = setInterval(function () {
     secDisplay = sec % 60;
     min = Math.floor(sec / 60);
@@ -564,10 +614,22 @@ function startTimer(duration) {
     totalGuessTime++;
     /*if ((sec % 5 == 0) && !browserOnly)
       parent.checkIfInVR();*/
+
+    if (sec < 20) {
+      document.getElementById("last-countdown").style.visibility = "visible";
+      document.getElementById("last-countdown").innerHTML =
+        min + ":" + zeroFiller + secDisplay;
+    }
+    if (sec < 10)
+      document.getElementById("last-countdown").classList.add("timer-warning");
+
     if (sec < 0) {
+      document.getElementById("last-countdown").classList.remove("timer-warning");
+      document.getElementById("last-countdown").innerHTML = "Timeout !";
       clearInterval(timer);
-      if (marker != null) resultWithMarkerChoice();
-      else resultWithoutMarkerChoice();
+      showAnswerRevealButton();
+      hideConfirmButton();
+      mapInteractable = false;
     }
   }, 1000);
 }
@@ -581,7 +643,7 @@ function startGame() {
 
   resetMarker();
   document.getElementById("btn").disabled = true;
-  chosenLandmarks = chooseFromLandmarks(listOfLandmarks,5);
+  chosenLandmarks = chooseFromLandmarks(listOfLandmarks, 5);
   generateNewTarget();
   displayRound();
   startTimer(timerDuration);
@@ -591,7 +653,7 @@ function startGame() {
     parent.checkIfInVR();*/
 }
 
-function WASM_start_menu(args)  {
+function WASM_start_menu(args) {
   ShowStartMenu();
 }
 
@@ -605,22 +667,24 @@ function WASM_round_x(args) {
 
   coordinates = {
     latitude: data.target_latitude,
-    longitude: data.target_longitude
-  }
+    longitude: data.target_longitude,
+  };
 
-  mapInteractable = true;
+  
   if (data.guessed) {
     markerLatitude = data.guessed_latitude;
     markerLongitude = data.guessed_longitude;
-    resultWithMarkerChoice()
+    resultWithMarkerChoice();
+    hideAnswerRevealButton();
   } else if (data.remaining_time > 0) {
+    mapInteractable = true;
     displayRound();
     startTimer(data.remaining_time);
     showConfirmButton();
   } else {
-    resultWithoutMarkerChoice();
+    hideConfirmButton();
+    showAnswerRevealButton();
   }
-  
 }
 
 function WASM_results(args) {
@@ -633,12 +697,11 @@ function WASM_results(args) {
   ShowEndResults();
 }
 
-
 window.onload = function () {
   wasmListener.on("PFE_JIN_start_menu", WASM_start_menu);
   wasmListener.on("PFE_JIN_round_x", WASM_round_x);
   wasmListener.on("PFE_JIN_results", WASM_results);
-  
+
   wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_get_state", "[]");
 
   map.zoomControl.remove();
@@ -745,14 +808,26 @@ function addAttribution() {
 }
 
 function hideConfirmButton() {
+  mapInteractable = false;
   ConfirmHidden = true;
   document.getElementById("map-help-text").style.visibility = "hidden";
   document.querySelector(".form").style.display = "none";
 }
 
 function showConfirmButton() {
+  mapInteractable = true;
+  hideAnswerRevealButton();
   ConfirmHidden = false;
   if (!UIHidden)
     document.getElementById("map-help-text").style.visibility = "visible";
   document.querySelector(".form").style.display = "block";
+}
+
+function showAnswerRevealButton() {
+  mapInteractable = false;
+  document.getElementById("show-answer-btn").style.display = "block";
+}
+
+function hideAnswerRevealButton() {
+  document.getElementById("show-answer-btn").style.display = "none";
 }
