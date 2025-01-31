@@ -182,7 +182,6 @@ map.on("mousedown", (event) => {
 
     clickTimer = setInterval(function () {
       clickCountdown += 0.05;
-      document.getElementById("ctd").value = 1;
       if (clickCountdown >= 0.15) clearInterval(clickTimer);
     }, 50);
   }
@@ -293,7 +292,7 @@ document.getElementById("btn").addEventListener("click", function () {
     let numbersOfDecimals = distance > 10 ? 0 : 3;
     distance = distance.toFixed(numbersOfDecimals);
     totalDistance += Number(distance);
-    
+
     resultWithMarkerChoice();
     hideConfirmButton();
     clearInterval(timer);
