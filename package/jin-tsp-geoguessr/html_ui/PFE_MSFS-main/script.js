@@ -286,7 +286,13 @@ document.getElementById("btn").addEventListener("click", function () {
       "PFE_JIN_guess",
       "[]"
     );
-
+    let distance = getDistanceFromLatLonInKm(
+      markerLatitude,
+      markerLongitude,
+      coordinates.latitude,
+      coordinates.longitude
+    );
+    
     let score = getScore(distance);
     totalScore += score;
     let numbersOfDecimals = distance > 10 ? 0 : 3;
