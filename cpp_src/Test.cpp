@@ -221,7 +221,8 @@ public:
         uint64_t shuffle[known_position_cnt] = {0};
         for (uint64_t i = 0; i < known_position_cnt; ++i) shuffle[i] = i;
 
-        static std::default_random_engine generator;
+        static auto const time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+        static std::default_random_engine generator(time.count());
         for (uint64_t i = 0; i < 5; ++i) {
             std::uniform_int_distribution<uint64_t> rd{i, known_position_cnt - 1};
             uint64_t new_i = rd(generator);
