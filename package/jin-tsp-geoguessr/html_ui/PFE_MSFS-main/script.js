@@ -161,7 +161,7 @@ function putDownMarker(event) {
     }
     markerLatitude = event.latlng.lat;
     markerLongitude = event.latlng.lng;
-    
+
     var dist = getDistanceFromLatLonInKm(
       coordinates.latitude,
       coordinates.longitude,
@@ -177,7 +177,7 @@ function putDownMarker(event) {
         distance: dist,
         score: getScore(dist),
       })
-    )
+    );
 
     marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
     console.log("clicked map");
@@ -289,12 +289,7 @@ function resetMarker() {
 // Confirm button click event
 document.getElementById("btn").addEventListener("click", function () {
   if (marker != null) {
-    
-    wasmListener.call(
-      "COMM_BUS_WASM_CALLBACK",
-      "PFE_JIN_guess",
-      "[]"
-    );
+    wasmListener.call("COMM_BUS_WASM_CALLBACK", "PFE_JIN_guess", "[]");
     let distance = getDistanceFromLatLonInKm(
       markerLatitude,
       markerLongitude,
@@ -531,9 +526,9 @@ function ShowEndResults() {
 
   let numbersOfDecimalsAverage = totalDistance / maxRound > 10 ? 1 : 3;
 
-  popupBox.innerHTML = `<h1>Game end !</h1><div class="popup-content"></br>Congratulations !</br>You scored a total of <h1>${totalScore} points</h1> and beat <h1>${topBeat}% of players</h1>.</br></br>Average guess time: <h1>${
+  popupBox.innerHTML = `<h1>Game end !</h1><div class="popup-content"></br>Congratulations !</br>You scored a total of <h1>${totalScore} points</h1> and beat <h1>${topBeat}% of players</h1>.</br></br>Average guess time: <h1>${(
     totalGuessTime / maxRound
-  } seconds</h1><br/>(Total time: ${totalGuessTime} seconds)
+  ).toFixed(2)} seconds</h1><br/>(Total time: ${totalGuessTime} seconds)
   <br/><br/>Average distance from marker: <h1>${(
     totalDistance / maxRound
   ).toFixed(
@@ -658,14 +653,18 @@ function startTimer(duration) {
         .getElementById("last-countdown")
         .classList.remove("timer-warning");
       document.getElementById("last-countdown").innerHTML = "Timeout !";
-      
-      let distance = getDistanceFromLatLonInKm(
-        markerLatitude,
-        markerLongitude,
-        coordinates.latitude,
-        coordinates.longitude
-      );
-      let score = getScore(distance);
+      let score = 0;
+      let distance = 0;
+      if (marker != null) {
+        distance = getDistanceFromLatLonInKm(
+          markerLatitude,
+          markerLongitude,
+          coordinates.latitude,
+          coordinates.longitude
+        );
+        score = getScore(distance);
+      }
+
       totalScore += score;
       let numbersOfDecimals = distance > 10 ? 0 : 3;
       distance = distance.toFixed(numbersOfDecimals);
