@@ -657,6 +657,19 @@ function startTimer(duration) {
         .getElementById("last-countdown")
         .classList.remove("timer-warning");
       document.getElementById("last-countdown").innerHTML = "Timeout !";
+      
+      let distance = getDistanceFromLatLonInKm(
+        markerLatitude,
+        markerLongitude,
+        coordinates.latitude,
+        coordinates.longitude
+      );
+      let score = getScore(distance);
+      totalScore += score;
+      let numbersOfDecimals = distance > 10 ? 0 : 3;
+      distance = distance.toFixed(numbersOfDecimals);
+      totalDistance += Number(distance);
+
       clearInterval(timer);
       showAnswerRevealButton();
       hideConfirmButton();
