@@ -183,8 +183,8 @@ public:
             ss << "\"target_longitude\": " << targets[2 * (round-1)] << ",";
             ss << "\"target_latitude\": " << targets[2 * (round-1) + 1] << ",";
             ss << "\"remaining_time\": " << countdown / 6 << ",";
-            ss << "\"guessed_longitude\": " << guess[0] << ",";
-            ss << "\"guessed_latitude\": " << guess[1] << ",";
+            ss << "\"guessed_longitude\": " << marker[0] << ",";
+            ss << "\"guessed_latitude\": " << marker[1] << ",";
             ss << "\"guessed\": " << (guessed ? "true" : "false") << "}";
 
             fsCommBusCall("PFE_JIN_round_x", ss.str().c_str(), ss.str().size(), FsCommBusBroadcast_JS);
@@ -242,16 +242,21 @@ public:
         SimConnect_UnsubscribeFromSystemEvent(sim, static_cast<DWORD>(UserEvent::TIME));
         state = State::CUSTOM_FLIGHT;
     }
-    void JS_guess(rapidjson::Document& doc) {
+    void JS_guess() {
         if (state != State::ROUND_X) return;
-        state = State::RESULT_X;
         guessed = true;
-        guess[0] = doc["longitude"].GetFloat();
-        guess[1] = doc["latitude"].GetFloat();
+        register_round();
+    }
 
-        total_distance += doc["distance"].GetFloat();
-        total_guess_time += GUESS_TIME - countdown;
-        total_score += doc["score"].GetUint64();
+    void JS_marker(rapidjson::Document& doc) {
+        if (state != State::ROUND_X) return;
+
+        marker[0] = doc["longitude"].GetFloat();
+        marker[1] = doc["latitude"].GetFloat();
+
+        distance = doc["distance"].GetFloat();
+        score = doc["score"].GetUint64();
+
     }
 
     void JS_end_round() {
@@ -264,6 +269,13 @@ public:
     }
 
 private:
+    void register_round() {
+        state = State::RESULT_X;
+        total_guess_time += GUESS_TIME - countdown;
+        total_distance += distance;
+        total_score += score;
+    }
+    
     void next_round() {
         ++round;
         countdown = GUESS_TIME;
@@ -336,12 +348,11 @@ private:
 
     void recv_time_event(SIMCONNECT_RECV_EVENT* data) {
         if (state == State::ROUND_X) {
-            std::cerr << "Time step\n";
+            std::cerr << "[PFE] Time step\n";
             --countdown;
             if (!countdown) {
                 SimConnect_UnsubscribeFromSystemEvent(sim, static_cast<DWORD>(UserEvent::TIME));
-                state = State::RESULT_X;
-                total_guess_time += GUESS_TIME;
+                register_round();
             }
         }
     }
@@ -350,40 +361,22 @@ private:
         State const old_state = state;
         switch (state) {
         case State::CUSTOM_FLIGHT_LAUNCHED:
-            if (data->dwData != 0) {
-                break;
-            }
             state = State::CUSTOM_FLIGHT_BRIEFING_NO_PAUSE;
             break;
         case State::CUSTOM_FLIGHT_BRIEFING_NO_PAUSE:
-            if (data->dwData != 1) {
-                break;
-            }
             state = State::CUSTOM_FLIGHT_BRIEFING_PAUSE;
             break;
         case State::CUSTOM_FLIGHT_BRIEFING_PAUSE:
-            if (data->dwData != 0) {
-                break;
-            }
             SimConnect_FlightSave(sim, FLIGHT_SAVE_LOCATION, "User-loaded flight", "Geo-guessing utility flight", 0);
             state = State::CUSTOM_FLIGHT;
             break;
         case State::TP_LAUNCHED:
-            if (data->dwData != 0) {
-                break;
-            }
             state = State::ACTIVE_BRIEFING_NO_PAUSE;
             break;
         case State::ACTIVE_BRIEFING_NO_PAUSE:
-            if (data->dwData != 1) {
-                break;
-            }
             state = State::ACTIVE_BRIEFING_PAUSE;
             break;
         case State::ACTIVE_BRIEFING_PAUSE:
-            if (data->dwData != 0) {
-                break;
-            }
             state = State::ROUND_X;
             SimConnect_SubscribeToSystemEvent(sim, static_cast<DWORD>(UserEvent::TIME), "6Hz");
         default:
@@ -395,10 +388,12 @@ private:
     }
 
     HANDLE sim = 0;
+    uint64_t score = 0;
     uint64_t total_score = 0;
     uint64_t total_guess_time = 0;
+    float distance = 0.0f;
     float total_distance = 0.0f;
-    float guess[2] = { 0.0f };
+    float marker[2] = { 0.0f };
     float targets[10] = { 0.0f };
     bool guessed = false;
 
@@ -454,11 +449,16 @@ void JS_quit_geoguessing(char const*, unsigned int, void*) {
     GeoGuessing::get().JS_quit_gg();
 }
 
-void JS_guess(char const* data, unsigned int size, void*) {
+void JS_guess(char const*, unsigned int, void*) {
     std::cerr << "[PFE] JS requested to guess\n";
+    GeoGuessing::get().JS_guess();
+}
+
+void JS_marker(char const* data, unsigned int size, void*) {
+    std::cerr << "[PFE] JS placed marker";
     rapidjson::Document doc;
     doc.Parse(data);
-    GeoGuessing::get().JS_guess(doc);
+    GeoGuessing::get().JS_marker(doc);
 }
 
 void JS_end_round(char const*, unsigned int, void*) {
@@ -479,6 +479,7 @@ extern "C" MSFS_CALLBACK void module_init(void)
     fsCommBusRegister("PFE_JIN_start_geoguessing", JS_start_geoguessing);
     fsCommBusRegister("PFE_JIN_quit_geoguessing", JS_quit_geoguessing);
     fsCommBusRegister("PFE_JIN_guess", JS_guess);
+    fsCommBusRegister("PFE_JIN_place_marker", JS_marker);
     fsCommBusRegister("PFE_JIN_end_of_round", JS_end_round);
 }
 

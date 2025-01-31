@@ -2,27 +2,27 @@
     "content": [
         {
             "path": "html_ui/CustomPanel.css",
-            "size": 1546,
+            "size": 1610,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/CustomPanel.html",
-            "size": 3434,
+            "size": 3516,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/CustomPanel.js",
-            "size": 4839,
+            "size": 4997,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/icons/toolbar/ICON.svg",
-            "size": 1024,
+            "size": 1034,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/Pages/MissionStartup/MissionStartup.css",
-            "size": 2044,
+            "size": 2143,
             "date": 132453435271410222
         },
         {
@@ -47,7 +47,7 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/index.html",
-            "size": 2744,
+            "size": 2922,
             "date": 132453435271410222
         },
         {
@@ -57,12 +57,12 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/script.js",
-            "size": 24138,
+            "size": 26576,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/PFE_MSFS-main/styles.css",
-            "size": 7215,
+            "size": 8623,
             "date": 132453435271410222
         },
         {
@@ -91,48 +91,13 @@
             "date": 132453435271410222
         },
         {
-            "path": "html_ui/tmp/CustomPanel.css",
-            "size": 1538,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/CustomPanel.html",
-            "size": 1535,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/CustomPanel.js",
-            "size": 5718,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/PFE_MSFS-main/flag_marker.png",
-            "size": 7425,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/PFE_MSFS-main/index.html",
-            "size": 1121,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/PFE_MSFS-main/script.js",
-            "size": 14199,
-            "date": 132453435271410222
-        },
-        {
-            "path": "html_ui/tmp/PFE_MSFS-main/styles.css",
-            "size": 1208,
-            "date": 132453435271410222
-        },
-        {
             "path": "InGamePanels/jin-tsp-geoguessr.spb",
             "size": 637,
             "date": 132453435271410222
         },
         {
             "path": "modules/Test.wasm",
-            "size": 1996010,
+            "size": 2019117,
             "date": 132453435271410222
         }
     ]
