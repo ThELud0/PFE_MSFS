@@ -820,7 +820,7 @@ function showUIElements() {
   UIHidden = false;
   document.getElementById("timer-help-text").style.visibility = "visible";
   document.getElementById("zoom-help-text").style.visibility = "visible";
-  document.getElementById("warning-help-text").style.visibility = "visible";
+  //document.getElementById("warning-help-text").style.visibility = "visible";
   if (!ConfirmHidden)
     document.getElementById("map-help-text").style.visibility = "visible";
   document.getElementById("confirm-help-text").style.visibility = "visible";
@@ -831,7 +831,7 @@ function hideUIElements() {
   UIHidden = true;
   document.getElementById("timer-help-text").style.visibility = "hidden";
   document.getElementById("zoom-help-text").style.visibility = "hidden";
-  document.getElementById("warning-help-text").style.visibility = "hidden";
+  //document.getElementById("warning-help-text").style.visibility = "hidden";
   document.getElementById("map-help-text").style.visibility = "hidden";
   document.getElementById("confirm-help-text").style.visibility = "hidden";
   // document.getElementById("help-help-text").style.visibility = "hidden";

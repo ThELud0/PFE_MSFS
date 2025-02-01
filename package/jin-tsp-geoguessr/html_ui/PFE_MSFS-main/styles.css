@@ -31,7 +31,7 @@
 }
 
 .form #confirm-help-text .confirm-help-img {
-  width: 28.30vw;
+  width: 28.38vw;
   height: 6vw;
 
 }
@@ -100,7 +100,7 @@
 }
 
 #timer-help-text .timer-help-img {
-  width: 31.6vw;
+  width: 28.9vw;
   height:7vw;
 }
 
@@ -175,8 +175,8 @@
   border:solid black 1.5px;
   color:black;
   border-radius: 4px;
-  padding:4px;
   background-color: rgba(255, 255, 255, 0.9);
+  padding:4px;
 }
 
 #popup-container .popup-box {
@@ -307,7 +307,7 @@
 }
 
 #zoom-help-text .zoom-help-img{
-  width:  27.73vw;
+  width:  23.51vw;
   height: 8vw;
 }
 
