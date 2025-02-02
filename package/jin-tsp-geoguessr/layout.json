@@ -37,7 +37,7 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/confirm_help.png",
-            "size": 105840,
+            "size": 101465,
             "date": 132453435271410222
         },
         {
@@ -47,7 +47,7 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/index.html",
-            "size": 2922,
+            "size": 2928,
             "date": 132453435271410222
         },
         {
@@ -57,17 +57,17 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/script.js",
-            "size": 28855,
+            "size": 28920,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/PFE_MSFS-main/styles.css",
-            "size": 8623,
+            "size": 8670,
             "date": 132453435271410222
         },
         {
             "path": "html_ui/PFE_MSFS-main/timer_help.png",
-            "size": 65891,
+            "size": 59917,
             "date": 132453435271410222
         },
         {
@@ -87,7 +87,7 @@
         },
         {
             "path": "html_ui/PFE_MSFS-main/zoom_help.png",
-            "size": 98943,
+            "size": 100281,
             "date": 132453435271410222
         },
         {
@@ -97,7 +97,7 @@
         },
         {
             "path": "modules/Test.wasm",
-            "size": 2021152,
+            "size": 2028423,
             "date": 132453435271410222
         }
     ]

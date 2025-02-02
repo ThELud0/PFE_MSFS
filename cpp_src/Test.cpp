@@ -19,7 +19,7 @@
 #define FLIGHT_LOAD_LOCATION ( WORK_DIRECTORY FLIGHT_LOAD_NAME)
 
 #define GUESS_TIME (5 * 60 * 6)
-
+#define ROUND_NB 5
 
 float const known_positions[] = {
     2.294126f, 48.857308f,                    // Eiffel tower
@@ -153,9 +153,22 @@ public:
         if (SimConnect_SubscribeToSystemEvent(sim, static_cast<DWORD>(UserEvent::PAUSE_STATE), "Pause") != S_OK) {
             return;
         }
-        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE PITCH DEGREES", "radians");
-        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE BANK DEGREES", "radians");
-        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::ANGLES), "PLANE HEADING DEGREES TRUE", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "PLANE PITCH DEGREES", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "PLANE BANK DEGREES", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "PLANE HEADING DEGREES TRUE", "radians");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "PLANE ALT ABOVE GROUND", "feet");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "VELOCITY BODY X", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "VELOCITY BODY Y", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "VELOCITY BODY Z", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "ROTATION VELOCITY BODY X", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "ROTATION VELOCITY BODY Y", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::RESET), "ROTATION VELOCITY BODY Z", "feet/second");
+
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::GET_ALT), "PLANE ALTITUDE", "feet");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::GET_ALT), "PLANE ALT ABOVE GROUND", "feet");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::GET_ALT), "VELOCITY BODY X", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::GET_ALT), "VELOCITY BODY Y", "feet/second");
+        SimConnect_AddToDataDefinition(sim, static_cast<DWORD>(DataDefs::GET_ALT), "VELOCITY BODY Z", "feet/second");
 
         SimConnect_CallDispatch(sim, &dispatch, nullptr);
     }
@@ -177,8 +190,7 @@ public:
         case State::INACTIVE:
             break;
         case State::ROUND_X:   
-        case State::RESULT_X:
-        {
+        case State::RESULT_X: {
             std::stringstream ss;
             ss << "{";
             ss << "\"round\": " << round << ",";
@@ -195,8 +207,7 @@ public:
             fsCommBusCall("PFE_JIN_round_x", ss.str().c_str(), ss.str().size(), FsCommBusBroadcast_JS);
             break;
         }
-        case State::RESULTS: 
-        {
+        case State::RESULTS:  {
             std::stringstream ss;
             ss << "{";
             ss << "\"total_guess_time\": " << total_guess_time / 6 << ",";
@@ -211,17 +222,19 @@ public:
             break;
         }
     }
+    
     void JS_briefing() {
         if (state == State::ACTIVE_BRIEFING_PAUSE) {
             fsCommBusCall("PFE_JIN_end_briefing", "[]", 3, FsCommBusBroadcast_JS);
+
+            // sometimes the planes appears upside down and on ground
+            double zero[] = { 0.0, 0.0, 0.0, initial_altitude, initial_velocity[0] , initial_velocity[1] , initial_velocity[2], 0.0, 0.0, 0.0 };
+            SimConnect_SetDataOnSimObject(sim, static_cast<DWORD>(DataDefs::RESET), SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG_DEFAULT, 1, sizeof(zero), static_cast<void*>(const_cast<double*>(zero)));
         }
         // sometimes CustomPanel.html is loaded before MissionStartup.html
         JS_get_state();
-        // sometimes the planes appears upside down
-        constexpr double zero[] = { 0.0, 0.0, 0.0 };
-        SimConnect_SetDataOnSimObject(sim, static_cast<DWORD>(DataDefs::ANGLES), SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_DATA_SET_FLAG_DEFAULT, 1, sizeof(zero), static_cast<void*>(const_cast<double*>(zero)));
     }
-
+    
     void JS_start_gg() {
         round = 0;
         total_score = 0;
@@ -233,7 +246,7 @@ public:
 
         static auto const time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
         static std::default_random_engine generator(time.count());
-        for (uint64_t i = 0; i < 5; ++i) {
+        for (uint64_t i = 0; i < ROUND_NB; ++i) {
             std::uniform_int_distribution<uint64_t> rd{i, known_position_cnt - 1};
             uint64_t new_i = rd(generator);
 
@@ -241,10 +254,18 @@ public:
             shuffle[i] = shuffle[new_i];
             shuffle[new_i] = tmp;
         }
-        for (uint64_t i = 0; i < 5; ++i) {
+        for (uint64_t i = 0; i < ROUND_NB; ++i) {
             targets[2 * i] = known_positions[2 * shuffle[i]];
             targets[2 * i + 1] = known_positions[2 * shuffle[i] + 1];
         }
+
+        /* static int index = 6;
+        for (int _index = 0; _index < ROUND_NB; ++_index) {
+            targets[2 * _index] = known_positions[2 * index];
+            targets[2 * _index + 1] = known_positions[2 * index + 1];
+            index = (index + 1) % known_position_cnt;
+        } */
+
         next_round();
     }
 
@@ -252,6 +273,7 @@ public:
         SimConnect_UnsubscribeFromSystemEvent(sim, static_cast<DWORD>(UserEvent::TIME));
         state = State::CUSTOM_FLIGHT;
     }
+    
     void JS_guess() {
         if (state != State::ROUND_X) return;
         guessed = true;
@@ -269,7 +291,7 @@ public:
     }
 
     void JS_end_round() {
-        if (round == 5) {
+        if (round == ROUND_NB) {
             state = State::RESULTS;
             JS_get_state();
         } else {
@@ -307,7 +329,6 @@ private:
         state = State::TP_LAUNCHED;
     }
 
-
     void internal_dispatch_proc(SIMCONNECT_RECV* data, DWORD size, void*) {
         if (!size) {
             return;
@@ -317,12 +338,29 @@ private:
             return recv_file(static_cast<SIMCONNECT_RECV_EVENT_FILENAME*>(data));
         case SIMCONNECT_RECV_ID_EVENT:
             return recv_event(static_cast<SIMCONNECT_RECV_EVENT*>(data));
+        case SIMCONNECT_RECV_ID_SIMOBJECT_DATA:
+            return recv_data(static_cast<SIMCONNECT_RECV_SIMOBJECT_DATA*>(data));
         default:
             std::stringstream ss;
             ss << "[PFE] Received unknown event: " << data->dwID << std::endl;
             std::cerr << ss.str();
             break;
         }
+    }
+
+    void recv_data(SIMCONNECT_RECV_SIMOBJECT_DATA* data) {
+        if (data->dwDefineID != static_cast<DWORD>(DataDefs::GET_ALT)) return;
+
+        double *alts = reinterpret_cast<double*>(&data->dwData);
+        initial_altitude = alts[1];
+        initial_velocity[0] = alts[2];
+        initial_velocity[1] = alts[3];
+        initial_velocity[2] = alts[4];
+
+        std::stringstream ss;
+        ss << "[PFE] Received altitudes: raw " << alts[0] << " ft; above ground " << alts[1] << " ft\n";
+
+        std::cerr << ss.str();
     }
 
     void recv_file(SIMCONNECT_RECV_EVENT_FILENAME* data) {
@@ -353,6 +391,7 @@ private:
             state = State::INACTIVE;
         }
     }
+    
     void recv_event(SIMCONNECT_RECV_EVENT* data) {
         switch (data->uEventID) {
         case static_cast<DWORD>(UserEvent::PAUSE_STATE):
@@ -388,6 +427,7 @@ private:
             break;
         case State::CUSTOM_FLIGHT_BRIEFING_PAUSE:
             SimConnect_FlightSave(sim, FLIGHT_SAVE_LOCATION, "User-loaded flight", "Geo-guessing utility flight", 0);
+            SimConnect_RequestDataOnSimObject(sim, static_cast<DWORD>(DataDefs::GET_ALT), static_cast<DWORD>(DataDefs::GET_ALT), SIMCONNECT_OBJECT_ID_USER, SIMCONNECT_PERIOD_ONCE);
             state = State::CUSTOM_FLIGHT;
             break;
         case State::TP_LOADED_FILE:
@@ -408,13 +448,17 @@ private:
     }
 
     HANDLE sim = 0;
+
+    double initial_altitude = 0.0;
+    double initial_velocity[3] = { 0.0 };
+
     uint64_t score = 0;
     uint64_t total_score = 0;
     uint64_t total_guess_time = 0;
     float distance = 0.0f;
     float total_distance = 0.0f;
     float marker[2] = { 0.0f };
-    float targets[10] = { 0.0f };
+    float targets[2 * ROUND_NB] = { 0.0f };
     bool guessed = false;
 
     uint64_t round = 0;
@@ -443,7 +487,8 @@ private:
     };
 
     enum class DataDefs {
-        ANGLES
+        RESET,
+        GET_ALT
     };
 
     friend void CALLBACK dispatch(SIMCONNECT_RECV* data, DWORD size, void* context);
